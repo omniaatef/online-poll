@@ -1,1 +1,60 @@
-register works
+    <form class="form-signup" (ngSubmit)="onSubmit(signUp)" #signUp="ngForm">
+        <div class="mb-4">
+            <img class="mb-4" src="../../../../../assets/images/logo.png" alt="">
+        </div>
+        <div class="form-row mb-2">
+            <div class="col">
+                <label for="FirstName" class=" text-left col pl-0">First Name:</label>
+                <input type="text" id="FirstName" class="form-control" placeholder="First Name :" 
+                required 
+                autofocus
+                ngModel
+                name="firstName"
+                #firstName="ngModel">
+                <!-- <span *ngIf="!firstName.valid && firstName.touched">Please enter a valid name</span> -->
+
+            </div>
+            <div class="col">
+                <label for="LastName" class="text-left col pl-0">Last Name:</label>
+                <input type="text" id="LastName" class="form-control" placeholder="Last Name :" 
+                required 
+                autofocus
+                ngModel
+                name="lastName"
+                #lastName="ngModel">
+                <!-- <span *ngIf="!lastName.valid && lastName.touched">Please enter a valid name</span> -->
+                
+            </div>
+
+        </div>
+
+
+        <div class="form-row mb-2">
+            <div class="col">
+                <label for="inputEmail" class="text-left col pl-0">Email address:</label>
+                <input type="email" id="inputEmail" class="form-control" placeholder="Email address" 
+                required 
+                autofocus
+                ngModel
+                name="emailAddress"
+                email>
+
+            </div>
+        </div>
+
+        <div class="form-row mb-2">
+            <div class="col">
+                <label for="inputPassword" class="text-left col pl-0">Password:</label>
+                <input type="password" id="inputPassword" class="form-control" placeholder="Password" 
+                required
+                password
+                ngModel
+                name="password">
+
+            </div>
+        </div>
+
+        <!-- <span *ngIf="!signUp.valid && signUp.touched">Please enter a valid Data</span> -->
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit" [disabled]="!signUp.valid">Sign Up</button>
+    </form>

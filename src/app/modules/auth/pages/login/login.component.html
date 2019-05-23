@@ -1,1 +1,27 @@
-login works
+<form class="form-signin" (ngSubmit)="onSubmit(signIn)" #signIn="ngForm">
+    <img class="mb-4" src="../../../../../assets/images/logo.png" alt="">
+    <label for="inputEmail" class="sr-only">Email address</label>
+
+    <input type="email" id="inputEmail" class="form-control" placeholder="Email address" 
+    required 
+    autofocus
+    email
+    ngModel
+    name="email">
+
+    <label for="inputPassword" class="sr-only">Password</label>
+    <input type="password" id="inputPassword" class="form-control" placeholder="Password" 
+    required
+    password
+    ngModel
+    name="password">
+
+    <div class="checkbox mb-3">
+        <label class="text-left col">
+    <input type="checkbox" value="remember-me"> Remember me
+</label>
+    </div>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+    <p class="mt-5 mb-3 text-muted">Not Registerd ? <a href="signUp.html">Sign Up Now</a></p>
+    <p class="mt-5 mb-3 text-muted">&copy; 2019</p>
+</form>
