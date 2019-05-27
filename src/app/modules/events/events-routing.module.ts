@@ -1,10 +1,20 @@
 import { Routes, RouterModule } from '@angular/router';
 import { EventsComponent } from './pages/events/events.component';
+import { CreateEventComponent } from './pages/create-event/create-event.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: EventsComponent
+    children:[
+      {
+        path: '',
+        component: EventsComponent
+      },
+      {
+        path: 'create-event',
+        component: CreateEventComponent
+      },
+    ]
   }
 ];
 

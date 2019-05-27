@@ -1,0 +1,90 @@
+
+    <section>
+      <div class="container">
+          <div class="row mt-3">
+              <div class="col-sm-6">
+
+                  <form class="" [formGroup]="eventForm">
+                      <div class="form-group">
+                          <label for="exampleFormControlInput1">Event name:</label>
+                          <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Hangout, eating out etc." formControlName="eventName">
+                      </div>
+                      <div class="form-group">
+                          <label for="exampleFormControlInput1">Event Image:</label>
+                          <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Hangout, eating out etc." formControlName="eventImage">
+                        
+                          <!-- <label for="exampleFormControlInput1">Event Image:</label>
+
+                          <div class="custom-file">
+                              <input type="text" class="form-control" id="customFile" formControlName="eventImage">
+                              <label class="custom-file-label" for="customFile">choose image</label>
+                          </div> -->
+                      </div>
+                      <div class="form-group">
+                          <label for="exampleFormControlInput1">Event date:</label>
+                          <input type="date" class="form-control" id="exampleFormControlInput1" formControlName="eventDate">
+                      </div>
+                      <div class="form-group">
+                          <label for="exampleFormControlTextarea1">Event Details:</label>
+                          <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Enter event details here to help your friends" formControlName="eventDetails"></textarea>
+                      </div>
+                      <div class="form-group"  formArrayName="eventVotingOptions">
+                          <label for="exampleFormControlInput1">Vote Options</label>
+                 
+                              <div class="input-group mb-3"  *ngFor="let option of eventForm.get('eventVotingOptions').controls; let i = index"  >
+                                  <input [formControlName]="i" type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2">
+                                  <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="button" id="button-addon2" (click)="deleteVotingOption(i)">Delete</button>
+                                  </div>
+                                </div>                           
+                              <button type="button" class="btn btn-primary btn-lg btn-block" (click)="addVotingOption()">Add Option</button>
+
+
+                      </div>
+
+                      <div class="form-group">
+                          <label for="exampleFormControlTextarea1">Additional Information:</label>
+                          <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="enter here any additional infor you want to share with friends" formControlName="eventInformation"></textarea>
+                      </div>
+
+                      <button type="button" class="btn btn-success btn-lg btn-block" (click)="onSubmit()">Create Event</button>
+
+
+                  </form>
+
+
+              </div>
+              <div class="col-6">
+                  <div class="card mb-3" style="max-width: 740px;">
+                      <div class="row no-gutters">
+                          <div class="col-sm-11 p-1" style="text-align:center">
+                              <img src=" http://lorempixel.com/200/200/food/" style="width:18rem" class="card-img" alt="...">
+                              <!-- <img src="http://lorempixel.com/200/300/food/" class="card-img-top" alt="..."> -->
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col">
+                              <div class="card-body">
+                                  <h5 class="card-title">Iftar Ramadan </h5>
+                                  <h5 class="card-text">14th May 2019 </h5>
+                                  <p class="card-text">
+                                      This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer. This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.
+                                  </p>
+                                  <h6 class="card-title">
+                                      Additional Information :
+                                  </h6>
+                                  <p class="card-text">
+                                      This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.
+
+                                  </p>
+                              </div>
+                          </div>
+
+                      </div>
+                  </div>
+
+              </div>
+          </div>
+          </div>
+
+  </section>
