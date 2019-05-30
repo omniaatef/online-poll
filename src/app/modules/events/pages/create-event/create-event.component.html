@@ -1,126 +1,130 @@
-
-    <section>
-      <div class="container">
-          <div class="row mt-3">
-              <div class="col-sm-6">
-
-                  <form class="" [formGroup]="eventForm">
-                      <div class="form-group">
-                          <label for="exampleFormControlInput1">Event name:</label>
-                          <input 
-                            type="text" 
-                            class="form-control" 
-                            id="exampleFormControlInput1" 
-                            placeholder="Hangout, eating out etc." 
+<section>
+  <div class="container">
+      <div class="row mt-3">
+          <div class="col-sm-6">
+              <form [formGroup]="createEventForm" (ngSubmit)='onSubmit()' class="">
+                  <div class="form-group">
+                      <label for="exampleFormControlInput1">Event name:</label>
+                      <input 
                             formControlName="eventName" 
+                            type="text" 
+                            class="form-control"
+                            id="exampleFormControlInput1" 
+                            placeholder="Hangout, eating out etc."
                             #eventname
-                          >
-                      </div>
-                      <div class="form-group">
-                          <label for="exampleFormControlInput1">Event Image:</label>
-                          <input 
+                      >
+
+                  </div>
+                  <div class="form-group">
+                        <label for="exampleFormControlInput1">Event Image:</label>
+                        <input 
+                            formControlName="image" 
                             type="text" 
                             class="form-control" 
                             id="exampleFormControlInput1" 
-                            placeholder="Hangout, eating out etc." 
-                            formControlName="eventImage"
+                            placeholder="past your image url..."
                             #eventimage
-                          >
-                      </div>
-                      <div class="form-group">
-                          <label for="exampleFormControlInput1">Event date:</label>
-                          <input 
+                        >
+                  </div>
+                  <div class="form-group">
+                      <label for="exampleFormControlInput1">Event date:</label>
+                      <input 
+                            formControlName="date" 
                             type="date" 
                             class="form-control" 
                             id="exampleFormControlInput1" 
-                            formControlName="eventDate"
                             #eventdate
-                          >
-                      </div>
-                      <div class="form-group">
-                          <label for="exampleFormControlTextarea1">Event Details:</label>
-                          <textarea 
+                      >
+                  </div>
+                  <div class="form-group">
+                      <label for="exampleFormControlTextarea1">Event Details:</label>
+                      <textarea 
+                            formControlName="details" 
                             class="form-control" 
                             id="exampleFormControlTextarea1" 
                             rows="3" 
-                            placeholder="Enter event details here to help your friends" 
-                            formControlName="eventDetails"
+                            placeholder="Enter event details here to help your friends"
                             #eventdetails
-                          ></textarea>
-                      </div>
-                      <div class="form-group"  formArrayName="eventVotingOptions">
-                          <label for="exampleFormControlInput1">Vote Options</label>
-                 
-                              <div class="input-group mb-3"  *ngFor="let option of eventForm.get('eventVotingOptions').controls; let i = index"  >
-                                  <input 
-                                    [formControlName]="i" 
-                                    type="text"
-                                    class="form-control" 
-                                    placeholder="Recipient's username" 
-                                    aria-label="Recipient's username" 
-                                    aria-describedby="button-addon2"
-                                  >
-                                  <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary" type="button" id="button-addon2" (click)="deleteVotingOption(i)">Delete</button>
-                                  </div>
-                                </div>                           
-                              <button type="button" class="btn btn-primary btn-md btn-block" (click)="addVotingOption()">Add Option</button>
-
-
-                      </div>
-
-                      <div class="form-group">
-                          <label for="exampleFormControlTextarea1">Additional Information:</label>
-                          <textarea 
-                            class="form-control" 
-                            id="exampleFormControlTextarea1" 
-                            rows="3" 
-                            placeholder="enter here any additional infor you want to share with friends" 
-                            formControlName="eventInformation"
-                            #eventinfo
-                          ></textarea>
-                      </div>
-
-                      <button 
-                        type="button" 
-                        class="btn btn-success btn-lg btn-block" 
-                        (click)="onSubmit()" 
-                        [disabled]="!eventForm.valid"
-                      >Create Event</button>
-
-
-                  </form>
-
-
-              </div>
-              <div class="col-6">
-                  <div class="card mb-3" style="max-width: 740px;">
-                      <div class="row no-gutters" *ngIf="eventForm.get('eventImage').valid">
-                          <div class="col-sm-11 p-1" style="text-align:center">
-                              <img  [src]="eventimage.value" style="width:18rem" class="card-img" alt="...">
-                          </div>
-                      </div>
-                      <div class="row">
-                          <div class="col">
-                              <div class="card-body">
-                                  <h5 class="card-title">{{ eventname.value }}</h5>
-                                  <h5 class="card-text">{{ eventdate.value}}</h5>
-                                  <p class="card-text">
-                                      {{ eventdetails.value}}
-                                  </p>
-                                  
-                                  <h6 class="card-title" *ngIf="eventinfo.value">
-                                      Additional Information :
-                                  </h6>
-                                  <pre class="card-text">{{ eventinfo.value }}</pre>
-                              </div>
-                          </div>
-
-                      </div>
+                      ></textarea>
                   </div>
 
-              </div>
-          </div>
+                    <div formArrayName="options" class="form-group">
+                        <label for="exampleFormControlInput1">Vote Options:</label>
+                        
+                        <div class="input-group mb-3" *ngFor="let option of this.createEventForm.get('options').controls; let i = index">
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                id="exampleFormControlInput1" 
+                                placeholder="add options to vote" 
+                                [formControlName]="i"
+                            >
+
+                            <div class="input-group-append">
+                                <button 
+                                    (click)="onDeleteOption(i)" 
+                                    class="btn btn-danger" 
+                                    type="button" id="button-addon2">
+                                        Delete
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group mb-2">
+                            <button class="btn btn-primary btn-sm btn-block" type="button" (click)="onAddOption()">Add</button>
+                        </div>
+
+                    </div>
+
+                  <div class="form-group">
+                      <label for="exampleFormControlTextarea1">Additional Information:</label>
+                      <textarea 
+                            formControlName="info" 
+                            class="form-control" 
+                            id="exampleFormControlTextarea1" 
+                            rows="3" 
+                            placeholder="enter here any additional infor you want to share with friends"
+                            #eventinfo
+                      ></textarea>
+                  </div>
+
+                    <button 
+                        type="submit" 
+                        class="btn btn-success btn-lg btn-block" 
+                        [disabled]="!createEventForm.valid">
+                        Create
+                    </button>
+              </form>
           </div>
 
-  </section>
+
+          <div class="col-6">
+                <div class="card mb-3" style="max-width: 740px;">
+                    <div class="row no-gutters" *ngIf="createEventForm.get('image').valid">
+                        <div class="col-sm-11 p-1" style="text-align:center">
+                            <img  [src]="eventimage.value" style="width:18rem" class="card-img" alt="...">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ eventname.value }}</h5>
+                                <h5 class="card-text">{{ eventdate.value}}</h5>
+                                <p class="card-text">
+                                    {{ eventdetails.value}}
+                                </p>
+                                
+                                <h6 class="card-title" *ngIf="eventinfo.value">
+                                    Additional Information :
+                                </h6>
+                                <pre class="card-text">{{ eventinfo.value }}</pre>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+      </div>
+      </div>
+</section>

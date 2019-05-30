@@ -1,0 +1,82 @@
+<section class="current-events mt-3">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-sm-8" >
+                <div class="card mb-3" style="max-width: 740px;">
+                    <div class="row no-gutters" *ngIf="eventItem">
+                        <div class="col-md-4">
+                            <img [src]="eventItem.image" class="card-img" alt="...">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title" >{{eventItem.eventName}}</h5>
+                                <p class="card-text">{{eventItem.details}}</p>
+                                <p class="card-text"><small class="text-muted">{{eventItem.date}}</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-sm-4">
+                <div class="card ">
+                    <div class="card-header bg-primary text-white">
+                        Where do you get your launch?
+                    </div>
+                    <div class="card-body ">
+                        <ul class="list-group list-group-flush" *ngIf="eventItem">
+
+                            <li class="list-group-item" *ngFor="let option of eventItem.options; let i = index">
+                                <div class="checkbox">
+                                    <label>
+                            <input type="checkbox" value=""> {{option}}
+                        </label>
+                                </div>
+                            </li>
+
+                            <!-- <li class="list-group-item">
+                                <div class="checkbox">
+                                    <label>
+                            <input type="checkbox" value=""> Salama
+                        </label>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="checkbox">
+                                    <label>
+                            <input type="checkbox" value=""> Rosto
+                        </label>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="checkbox">
+                                    <label>
+                            <input type="checkbox" value=""> Kosahry
+                        </label>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="checkbox">
+                                    <label>
+                            <input type="checkbox" value=""> Set el sham
+                        </label>
+                                </div>
+                            </li> -->
+                        </ul>
+                    </div>
+                    <div class="panel-footer text-center">
+                        <button type="button" class="btn btn-primary btn-block btn-sm">
+                Vote</button>
+                        <a href="#" class="small">View Result</a>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+</section>

@@ -4,7 +4,7 @@ import { NgModule} from '@angular/core';
 import { AuthGuard } from './guards/auth.guard';
 import { NoAuthGuard } from './guards/no-auth.guard';
 import { AuthService } from './services/auth.service';
-import { EventService } from './services/event.service';
+import { EventStorageService } from './services/event-storage.service';
 import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
@@ -15,7 +15,7 @@ import { HttpClientModule } from '@angular/common/http';
         AuthGuard,
         NoAuthGuard,
         AuthService,
-        EventService
+        EventStorageService
     ]
 })
 export class CoreModule {

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { eventForm } from 'src/app/core/models/event-form.model';
 
 @Component({
   selector: 'app-events',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EventsComponent implements OnInit {
 
+  // eventsDataArr :eventForm[];
+
   constructor() { }
 
   ngOnInit() {
+    // console.log('inside event Comp:', this.eventsDataArr);
+    
   }
 
 }

@@ -6,6 +6,8 @@ import { RouterModule } from '@angular/router';
 // import { MaterialModule } from './material.module';
 
 import { SpinnerComponent } from './components/spinner/spinner.component';
+import { EventsModule } from '../modules/events/events.module';
+import { EventListComponent } from './components/event-list/event-list.component';
 
 @NgModule({
     imports: [
@@ -15,7 +17,8 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
         RouterModule,
     ],
     declarations: [
-      SpinnerComponent
+      SpinnerComponent,
+      EventListComponent
     ],
     exports: [
       CommonModule,
@@ -25,8 +28,8 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
 
       // MaterialModule,
 
-
-      SpinnerComponent
+      SpinnerComponent,
+      EventListComponent
     ]
 })
 export class SharedModule { }

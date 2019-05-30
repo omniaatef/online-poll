@@ -23,7 +23,7 @@ import { SharedModule } from './shared';
     ContentLayoutComponent,
     NavComponent,
     FooterComponent,
-    AuthLayoutComponent
+    AuthLayoutComponent,
   ],
   imports: [
     // angular

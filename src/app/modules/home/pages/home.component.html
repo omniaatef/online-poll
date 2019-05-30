@@ -2,19 +2,9 @@
     <div class="container">
         <h2>Current Events</h2>
         <hr>
-        <div class="row">
+        <!-- <div class="row"> -->
 
-            <div class="col-sm-3" *ngFor="let eventItem of eventsData">
-                <div class="card" >
-                    <img [src]="eventItem.eventImage" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">{{eventItem.eventName}} </h5>
-                        <p class="card-text">{{eventItem.eventDetails}}</p>
-                        <a href="#" class="btn btn-primary">Particibate</a> <span class="badge badge-primary float-right">New!</span>
-
-                    </div>
-                </div>
-            </div>
+            <app-event-list></app-event-list>
 
 
             <!-- <div class="col-sm-3">
@@ -27,9 +17,9 @@
                     </div>
                 </div>
 
-            </div>
+            </div> -->
 
-            <div class="col-sm-3">
+            <!-- <div class="col-sm-3">
                 <div class="card">
                     <img src=" https://picsum.photos/200/300/?blur" class="card-img-top" alt="...">
                     <div class="card-body">
@@ -40,6 +30,6 @@
                 </div>
 
             </div> -->
-        </div>
+        <!-- </div> -->
     </div>
 </section>

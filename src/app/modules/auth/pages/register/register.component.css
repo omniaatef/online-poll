@@ -16,3 +16,12 @@
 .form-signup{
     text-align: center
 }
+
+.form-signup {
+    width: 100%;
+    max-width: 480px;
+    padding: 15px;
+    margin: auto;
+    padding-top: 40px;
+    padding-bottom: 40px;
+}

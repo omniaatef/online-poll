@@ -1,0 +1,16 @@
+
+        <div class="row">
+
+            <div class="col-sm-3" *ngFor="let eventItem of eventsData; let i = index">
+              <div class="card" style="cursor: pointer" routerLink="/../../events/event-details/{{i}}">
+                
+                  <img [src]="eventItem.image" class="card-img-top" alt="...">
+                  <div class="card-body">
+                    <h5 class="card-title">{{eventItem.eventName}} </h5>
+                    <p class="card-text">{{eventItem.details}}</p>
+                    <!-- <a routerLink="/../../events/event-details/{{i}}" class="btn btn-primary">Particibate</a> <span class="badge badge-primary float-right">New!</span> -->
+                  </div>
+                </div>
+              </div>
+              
+      </div>
