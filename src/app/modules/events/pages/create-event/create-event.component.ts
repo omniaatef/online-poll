@@ -21,6 +21,7 @@ export class CreateEventComponent implements OnInit {
       'image': new FormControl('',[Validators.required,Validators.pattern('(https?:\/\/.*\.(?:png|jpg))')]),
       'date': new FormControl('', Validators.required),
       'details': new FormControl('',  Validators.required),
+      'eventQuestion': new FormControl('',  Validators.required),
       'options': new FormArray([], Validators.required),
       'info': new FormControl('')
     });

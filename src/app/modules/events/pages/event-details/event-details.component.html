@@ -19,59 +19,77 @@
                 </div>
 
             </div>
-            <div class="col-sm-4">
-                <div class="card ">
-                    <div class="card-header bg-primary text-white">
-                        Where do you get your launch?
-                    </div>
-                    <div class="card-body ">
-                        <ul class="list-group list-group-flush" *ngIf="eventItem">
 
-                            <li class="list-group-item" *ngFor="let option of eventItem.options; let i = index">
-                                <div class="checkbox">
-                                    <label>
-                            <input type="checkbox" value=""> {{option}}
-                        </label>
-                                </div>
-                            </li>
+                    <div class="col-sm-4">
+                        <div class="user-poll-section card">
 
-                            <!-- <li class="list-group-item">
-                                <div class="checkbox">
-                                    <label>
-                            <input type="checkbox" value=""> Salama
-                        </label>
+
+                            <form [formGroup]="eventVotingForm">
+                            <div class="card card-default">
+                                    <div class="card-header bg-primary text-white">
+                                            <strong>Question : </strong>Which is the best responsive framework to start web designing ?
+        
                                 </div>
-                            </li>
-                            <li class="list-group-item">
-                                <div class="checkbox">
-                                    <label>
-                            <input type="checkbox" value=""> Rosto
-                        </label>
+
+                                <div class="card-body" formArrayName="options">
+                                        <ul class="list-group list-group-flush" *ngIf="eventItem">
+
+                                                <li class="list-group-item" *ngFor="let option of eventItem.options; let i = index">
+                                                    <div class="checkbox">
+                                                        <label>
+                                                        <input (change)="onVoteSelected($event)" #checkInput type="checkbox" [formControlName]="i"> {{option}}
+                                                    </label>
+                                                    </div>
+                                                </li> 
+                    
+                                            </ul>
+
+                                            <br>
+                                    <p class="text-danger">Result Of User Votes :</p>
+                                    <hr />
+                                    <div *ngIf="eventItem" >
+                                        <div *ngFor="let option of eventItem.options; let i = index">
+                                            {{option}} (60%) :
+                                            <div class="progress  progress-bar-striped active">
+                                                <div class="progress-bar  bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                                        <span class="sr-only">60% Complete (success)</span>
+                                                    </div>
+                                            </div>
+                                            </div>
+                                        </div>
+
+                                            <!-- W3C CSS/HTML Specification (30%) :
+                                       <div class="progress progress-bar-striped active">
+                                           <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width: 30%">
+                                               <span class="sr-only">30% Complete (success)</span>
+                                           </div>
+                                       </div>
+                                    Skeleton (10%) :
+                                       <div class="progress progress-bar-striped active">
+                                           <div class="progress-bar bg-info" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 10%">
+                                               <span class="sr-only">10% Complete (success)</span>
+                                           </div>
+                                       </div>
+                                       Electron (0%) :
+                                       <div class="progress progress-bar-striped active">
+                                           <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 10%">
+                                               <span class="sr-only">10% Complete (success)</span>
+                                           </div>
+                                       </div> -->
                                 </div>
-                            </li>
-                            <li class="list-group-item">
-                                <div class="checkbox">
-                                    <label>
-                            <input type="checkbox" value=""> Kosahry
-                        </label>
-                                </div>
-                            </li>
-                            <li class="list-group-item">
-                                <div class="checkbox">
-                                    <label>
-                            <input type="checkbox" value=""> Set el sham
-                        </label>
-                                </div>
-                            </li> -->
-                        </ul>
+
+                                <!-- <div class="card-footer">
+                                    <a href="#" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-bell"></span> Mark Your Vote</a>
+                                </div> -->
+                                <br>
+                            </div>
+                            </form>
+
+        
+                        </div>
+                        <!-- POLL DIV END-->
                     </div>
-                    <div class="panel-footer text-center">
-                        <button type="button" class="btn btn-primary btn-block btn-sm">
-                Vote</button>
-                        <a href="#" class="small">View Result</a>
-                    </div>
-                </div>
-            </div>
+        
 
 
         </div>

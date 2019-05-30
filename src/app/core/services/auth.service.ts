@@ -5,6 +5,9 @@ import { Router } from '@angular/router';
 
 @Injectable()
 export class AuthService{
+
+    token : string;
+
     constructor(private router: Router){}
     registerUser(email:string, password:string){
         firebase.auth().createUserWithEmailAndPassword(email,password)
@@ -32,5 +35,9 @@ export class AuthService{
             error => console.log("error login", error)
             
         )
+    }
+
+    getToken(){
+       return firebase.auth().currentUser.uid;
     }
 }

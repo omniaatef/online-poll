@@ -6,6 +6,7 @@ import { NoAuthGuard } from './guards/no-auth.guard';
 import { AuthService } from './services/auth.service';
 import { EventStorageService } from './services/event-storage.service';
 import { HttpClientModule } from '@angular/common/http';
+import { VotingStorageService } from './services/voting-storage.service';
 
 @NgModule({
     imports: [
@@ -15,7 +16,8 @@ import { HttpClientModule } from '@angular/common/http';
         AuthGuard,
         NoAuthGuard,
         AuthService,
-        EventStorageService
+        EventStorageService,
+        VotingStorageService
     ]
 })
 export class CoreModule {
