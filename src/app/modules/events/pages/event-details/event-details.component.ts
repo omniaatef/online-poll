@@ -18,6 +18,7 @@ export class EventDetailsComponent implements OnInit {
   eventItem: eventForm;
   eventVotingForm:FormGroup;
   progressCounter:number = 0;
+  optionCheckd: boolean = false;
 
   constructor(private route: ActivatedRoute,
               private eventService: EventStorageService,
@@ -75,6 +76,7 @@ export class EventDetailsComponent implements OnInit {
     if ( event.target.checked ) {
       console.log('event');
       this.progressCounter +=  1;
+      this.optionCheckd = true;
       // console.log('this.progressCounter:', this.progressCounter);
  }
 
