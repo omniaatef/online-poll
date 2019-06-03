@@ -123,8 +123,12 @@
                                 <h5 class="card-title">{{ eventname.value }}</h5>
                                 <h5 class="card-text">{{ eventdate.value}}</h5>
                                 <p class="card-text">
-                                    {{ eventdetails.value}}
+                                    {{ eventdetails.value }}
                                 </p>
+                                <li class="card-text" *ngFor="let option of this.createEventForm.get('options').controls">
+                                    {{ option.value }}
+                                </li>
+
                                 
                                 <h6 class="card-title" *ngIf="eventinfo.value">
                                     Additional Information :
