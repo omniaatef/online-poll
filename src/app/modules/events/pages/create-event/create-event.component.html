@@ -5,11 +5,11 @@
               <form [formGroup]="createEventForm" (ngSubmit)='onSubmit()' class="">
                   <div class="form-group">
                       <label for="exampleFormControlInput1">Event name:</label>
-                      <input 
-                            formControlName="eventName" 
-                            type="text" 
+                      <input
+                            formControlName="eventName"
+                            type="text"
                             class="form-control"
-                            id="exampleFormControlInput1" 
+                            id="exampleFormControlInput1"
                             placeholder="Hangout, eating out etc."
                             #eventname
                       >
@@ -17,32 +17,32 @@
                   </div>
                   <div class="form-group">
                         <label for="exampleFormControlInput1">Event Image:</label>
-                        <input 
-                            formControlName="image" 
-                            type="text" 
-                            class="form-control" 
-                            id="exampleFormControlInput1" 
+                        <input
+                            formControlName="image"
+                            type="text"
+                            class="form-control"
+                            id="exampleFormControlInput1"
                             placeholder="past your image url..."
                             #eventimage
                         >
                   </div>
                   <div class="form-group">
                       <label for="exampleFormControlInput1">Event date:</label>
-                      <input 
-                            formControlName="date" 
-                            type="date" 
-                            class="form-control" 
-                            id="exampleFormControlInput1" 
+                      <input
+                            formControlName="date"
+                            type="date"
+                            class="form-control"
+                            id="exampleFormControlInput1"
                             #eventdate
                       >
                   </div>
                   <div class="form-group">
                       <label for="exampleFormControlTextarea1">Event Details:</label>
-                      <textarea 
-                            formControlName="details" 
-                            class="form-control" 
-                            id="exampleFormControlTextarea1" 
-                            rows="3" 
+                      <textarea
+                            formControlName="details"
+                            class="form-control"
+                            id="exampleFormControlTextarea1"
+                            rows="3"
                             placeholder="Enter event details here to help your friends"
                             #eventdetails
                       ></textarea>
@@ -50,11 +50,11 @@
 
                   <div class="form-group">
                     <label for="exampleFormControlInput1">Vote Question:</label>
-                    <input 
-                          formControlName="eventQuestion" 
-                          type="text" 
+                    <input
+                          formControlName="eventQuestion"
+                          type="text"
                           class="form-control"
-                          id="exampleFormControlInput1" 
+                          id="exampleFormControlInput1"
                           placeholder="Where do you get your launch?"
                           #eventquestion
                     >
@@ -62,26 +62,26 @@
 
                     <div formArrayName="options" class="form-group">
                         <label for="exampleFormControlInput1">Vote Options:</label>
-                        
+
                         <div class="input-group mb-3" *ngFor="let option of this.createEventForm.get('options').controls; let i = index">
-                            <input 
-                                type="text" 
-                                class="form-control" 
-                                id="exampleFormControlInput1" 
-                                placeholder="add options to vote" 
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="exampleFormControlInput1"
+                                placeholder="add options to vote"
                                 [formControlName]="i"
                             >
 
                             <div class="input-group-append">
-                                <button 
-                                    (click)="onDeleteOption(i)" 
-                                    class="btn btn-danger" 
+                                <button
+                                    (click)="onDeleteOption(i)"
+                                    class="btn btn-danger"
                                     type="button" id="button-addon2">
                                         Delete
                                 </button>
                             </div>
                         </div>
-                        
+
                         <div class="form-group mb-2">
                             <button class="btn btn-primary btn-sm btn-block" type="button" (click)="onAddOption()">Add</button>
                         </div>
@@ -90,27 +90,26 @@
 
                   <div class="form-group">
                       <label for="exampleFormControlTextarea1">Additional Information:</label>
-                      <textarea 
-                            formControlName="info" 
-                            class="form-control" 
-                            id="exampleFormControlTextarea1" 
-                            rows="3" 
+                      <textarea
+                            formControlName="info"
+                            class="form-control"
+                            id="exampleFormControlTextarea1"
+                            rows="3"
                             placeholder="enter here any additional infor you want to share with friends"
                             #eventinfo
                       ></textarea>
                   </div>
 
-                    <button 
-                        type="submit" 
-                        class="btn btn-success btn-lg btn-block" 
+                    <button
+                        type="submit"
+                        class="btn btn-success btn-lg btn-block"
                         [disabled]="!createEventForm.valid">
                         Create
                     </button>
               </form>
           </div>
 
-
-          <div class="col-6">
+          <div class="col-6" >
                 <div class="card mb-3" style="max-width: 740px;">
                     <div class="row no-gutters" *ngIf="createEventForm.get('image').valid">
                         <div class="col-sm-11 p-1" style="text-align:center">
@@ -129,7 +128,7 @@
                                     {{ option.value }}
                                 </li>
 
-                                
+
                                 <h6 class="card-title" *ngIf="eventinfo.value">
                                     Additional Information :
                                 </h6>

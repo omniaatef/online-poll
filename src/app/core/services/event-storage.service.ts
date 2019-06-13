@@ -12,7 +12,6 @@ export class EventStorageService {
     storeEventData(data: eventForm){
         console.log('inside store Event Data', data);
         return this.http.post('https://online-poll-84371.firebaseio.com/EventData.json',data);
-
     }
 
 

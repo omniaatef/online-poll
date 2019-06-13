@@ -1,6 +1,8 @@
 export class VotingStatusModel {
-    options: boolean[];
-    status: string;
+    email: string;
+    eventIndex: number;
+    option: [];
+
 
 }
 

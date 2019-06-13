@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges } from '@angular/core';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { EventStorageService } from 'src/app/core/services/event-storage.service';
 import { eventForm } from 'src/app/core/models/event-form.model';
@@ -8,12 +8,14 @@ import { eventForm } from 'src/app/core/models/event-form.model';
   templateUrl: './create-event.component.html',
   styleUrls: ['./create-event.component.css']
 })
-export class CreateEventComponent implements OnInit {
+export class CreateEventComponent implements OnInit, OnChanges {
 
   createEventForm : FormGroup;
   // eventData: eventForm[];
 
-  constructor(private EventService: EventStorageService) { }
+  constructor(private EventService: EventStorageService) {
+
+   }
 
   ngOnInit() {
     this.createEventForm = new FormGroup({
@@ -29,9 +31,25 @@ export class CreateEventComponent implements OnInit {
     console.log('inside Submit Form', this.createEventForm.value);
 
 
+
+
     // this.eventData = this.createEventForm.value;
     // console.log('type ofd ', typeof(this.eventData));
   }
+
+
+  ngOnChanges(){
+    console.log('inside on changes');
+
+  }
+  
+  
+
+  // this.createEventForm.valueChanges.subscribe(() => {
+  //   if (this.registerForm.controls['yourControlName'].value === 'someValue') {
+  //      // 
+  //   }
+  // });
 
 
   onSubmit(){
