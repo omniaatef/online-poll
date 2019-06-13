@@ -38,6 +38,11 @@ export class EventDetailsComponent implements OnInit {
 
   targetCounter:VotingCounterModel;
 
+  flag = true;
+  checkFirstVote: boolean;
+  touched: boolean= false;
+  notExistFlag : boolean = true;
+
 
   constructor(private route: ActivatedRoute,
               private eventService: EventStorageService,
@@ -139,35 +144,156 @@ export class EventDetailsComponent implements OnInit {
       option: this.eventVotingForm.value
     }
     this.votingService.setVotingData(eventData);
-    
+
+
+  //   this.votingService.getVotingStatus().subscribe(
+  //     (res)=>{
+  //         this.voteingData = res;
+  //     }
+  // );
+    this.touched = true;
     this.onFillMatchedEvents();
+    this.touched = false;
     
   }
 
 
   onFillMatchedEvents(){
     this.matchedEvents = [];
-    debugger;
+
+    for(let i=0; i<this.eventVotingForm.value['options'].length; i++){
+      this.targetCounter.counter[i] = 0; 
+    }
+
     let counterLength ;
     console.log('inside onFill', this.voteingData);
+
+    
+    
     
     this.voteingData.forEach(element => {
-      debugger;
-      if(element){        
-        if(this.index == element.eventIndex){
-          this.matchedEvents.push(element);
-          console.log('element', element.option['options']);
+      // debugger;
+      
+      let checkFirstVote = this.voteingData.find(element=>{
+        if(element){
+          this.userEmail = this.auth.getUserLoggedIn()['email'];
+          return element.email == this.userEmail;
         }
+      });
+
+        if(element){     
+          
+          
+
+
+        if(this.touched){
+          console.log('touched');
+
+          if((this.index == element.eventIndex) && (this.userEmail != element.email)){
+                this.matchedEvents.push(element);
+              }
+
+          else if((this.index == element.eventIndex) && (this.userEmail == element.email)){
+              console.log('event that changes:', element);
+              element.option['options'] = this.eventVotingForm.value['options'];
+              this.matchedEvents.push(element);
+              
+            }
+
+            else if(checkFirstVote == undefined && this.notExistFlag ){
+                let lastMatched: VotingStatusModel;
+                lastMatched = {
+                  email:this.userEmail,
+                  eventIndex: this.index,
+                  option: this.eventVotingForm.value
+                }
+
+                this.matchedEvents.push(lastMatched);
+                this.notExistFlag = false;
+
+            }
+          // this.touched = false;
+        } 
+        
+        else{
+          if((this.index == element.eventIndex)){
+            this.matchedEvents.push(element);
+            // if(this.userEmail == element.email){
+  
+            // }
+            // console.log('element', element.option['options']);
+          }
+        }
+
+
+        // else if((this.index == element.eventIndex) && (this.userEmail == element.email)){
+        //   console.log('event that changes:', element);
+        //   element.option['options'] = this.eventVotingForm.value['options'];
+        //   this.matchedEvents.push(element);
+          
+        // }
+        // else if(checkFirstVote == undefined){
+        //   debugger;
+        //   console.log('new email has voted');
+        //   // this.matchedEvents.push();
+        //   let lastMatched: VotingStatusModel;
+        //   lastMatched = {
+        //     email:this.userEmail,
+        //     eventIndex: this.index,
+        //     option: null
+        //   }
+        //   // this.matchedEvents.push(lastMatched);
+        //   // checkFirstVote == null;
+        //   console.log('last matched', this.matchedEvents);
+          
+          
+
+        // }
       }
+
+
+
+      // if(element){        
+      //   if((this.index == element.eventIndex) && (this.userEmail != element.email)){
+      //     this.matchedEvents.push(element);
+      //     // if(this.userEmail == element.email){
+
+      //     // }
+      //     // console.log('element', element.option['options']);
+      //   }
+      //   else if((this.index == element.eventIndex) && (this.userEmail == element.email)){
+      //     console.log('event that changes:', element);
+      //     element.option['options'] = this.eventVotingForm.value['options'];
+      //     this.matchedEvents.push(element);
+          
+      //   }
+      //   else if(checkFirstVote == undefined){
+      //     debugger;
+      //     console.log('new email has voted');
+      //     // this.matchedEvents.push();
+      //     let lastMatched: VotingStatusModel;
+      //     lastMatched = {
+      //       email:this.userEmail,
+      //       eventIndex: this.index,
+      //       option: null
+      //     }
+      //     // this.matchedEvents.push(lastMatched);
+      //     // checkFirstVote == null;
+      //     console.log('last matched', this.matchedEvents);
+          
+          
+
+      //   }
+      // }
     });
 
 
     this.matchedEvents.forEach(item =>{
-
+      debugger;
       counterLength =  item.option['options'].length;
 
-      if(counterLength){
-      
+      if(counterLength && this.flag){
+        debugger;
         let counterItem = {
           eventIndex:this.index,
           counter: []
@@ -178,6 +304,8 @@ export class EventDetailsComponent implements OnInit {
         }
   
         this.votingCounter.push(counterItem);
+        this.flag = false;
+
       }
 
 
@@ -187,16 +315,22 @@ export class EventDetailsComponent implements OnInit {
       });
       console.log('target Counter ', this.targetCounter.counter);
 
+   
+
+
+      
 
       for(let i=0; i<item.option['options'].length; i++){
 
         if(item.option['options'][i] == true){
+          debugger;
           this.targetCounter.counter[i]++;
         }
         else{
           
         }
       }
+      
 
         console.log('targetCounter outSide For', this.targetCounter.counter);
     });
