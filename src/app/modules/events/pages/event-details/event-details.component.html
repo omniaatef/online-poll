@@ -49,34 +49,20 @@
                                     <hr />
                                     
                                     <div *ngIf="eventItem" >
-                                        <div *ngFor="let option of eventItem.options; let i = index">
-                                            {{option}} ({{this.targetCounter.counter[i]}})  :
+                                        <div  *ngFor="let option of eventItem.options; let i = index">
+                                            {{option}} 
+                                            <span *ngIf="this.targetCounter">({{this.targetCounter.counter[i]}})</span>
+                                            <!-- <span *ngIf="this.targetCounter">( {{this.viewVotePercentage[i] | number}} %)</span> -->
+                                            <span *ngIf="!this.targetCounter">(0)</span>:
                                             <div class="progress  progress-bar-striped active">
-                                                <div class="progress-bar  bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 50%">
-                                                        <span class="sr-only">60% Complete (success)</span>
+                                                <!-- <div class="progress-bar  bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:"50%;"> -->
+                                                    <div class="progress-bar  bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" [ngStyle]="setMyStyles(i)">
+                                                        <span *ngIf="this.viewVotePercentage" class="">{{this.viewVotePercentage[i] | number}}%</span>
                                                     </div>
                                             </div>
                                             </div>
                                         </div>
 
-                                            <!-- W3C CSS/HTML Specification (30%) :
-                                       <div class="progress progress-bar-striped active">
-                                           <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width: 30%">
-                                               <span class="sr-only">30% Complete (success)</span>
-                                           </div>
-                                       </div>
-                                    Skeleton (10%) :
-                                       <div class="progress progress-bar-striped active">
-                                           <div class="progress-bar bg-info" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 10%">
-                                               <span class="sr-only">10% Complete (success)</span>
-                                           </div>
-                                       </div>
-                                       Electron (0%) :
-                                       <div class="progress progress-bar-striped active">
-                                           <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 10%">
-                                               <span class="sr-only">10% Complete (success)</span>
-                                           </div>
-                                       </div> -->
                                 </div>
 
                                 <!-- <div class="card-footer">

@@ -34,14 +34,18 @@ export class EventDetailsComponent implements OnInit {
   votingCounter :VotingCounterModel[] = [
   ];
   
-  // eventVotingCounter:FormGroup;
-
   targetCounter:VotingCounterModel;
 
   flag = true;
   checkFirstVote: boolean;
   touched: boolean= false;
   notExistFlag : boolean = true;
+
+  viewVotePercentage = [];
+
+  // myStyles = {
+  //   'width': '100%'
+  //   }
 
 
   constructor(private route: ActivatedRoute,
@@ -66,9 +70,7 @@ export class EventDetailsComponent implements OnInit {
       'options': new FormArray([]),
     });
 
-    // this.eventVotingCounter = new FormGroup({
-    //   'options': new FormArray([]),
-    // });
+
 
     /*Get event If Voted by current user */
     this.votingService.getVotingStatus().subscribe(
@@ -78,10 +80,7 @@ export class EventDetailsComponent implements OnInit {
         let newEventIndex = this.index;
 
           this.voteingData = res;
-          let matchedEventsIndexes = this.onFillMatchedEvents();
-          console.log('matchedEventsIndexes', matchedEventsIndexes);
-          
-
+          this.onFillMatchedEvents();
 
             this.eventItemFounded = this.voteingData.find(
               function(eventEl) {
@@ -95,7 +94,6 @@ export class EventDetailsComponent implements OnInit {
   /**End of Voted by current user */
 
 
-    
     /* Get Event Details for current event Index */
     this.eventService.getEventData().subscribe(
       Response => {
@@ -111,14 +109,7 @@ export class EventDetailsComponent implements OnInit {
             const control = new FormControl(item);
             const controlCount = new FormControl(0);
             (<FormArray>this.eventVotingForm.get('options')).push(control);
-
-            // (<FormArray>this.eventVotingCounter.get('options')).push(controlCount);
-
           }
-
-          // console.log('new form array', this.eventVotingCounter);
-          
-          
         }
         else{
             for (let item of this.eventItem.options){
@@ -130,12 +121,11 @@ export class EventDetailsComponent implements OnInit {
   );
 
 
-
-
   }
 
 
-  onVoteSelected(event){
+
+  onVoteSelected(){
     this.userEmail = this.auth.getUserLoggedIn()['email'];
     this.eventIndex = this.index;
     let eventData: VotingStatusModel = {
@@ -145,12 +135,6 @@ export class EventDetailsComponent implements OnInit {
     }
     this.votingService.setVotingData(eventData);
 
-
-  //   this.votingService.getVotingStatus().subscribe(
-  //     (res)=>{
-  //         this.voteingData = res;
-  //     }
-  // );
     this.touched = true;
     this.onFillMatchedEvents();
     this.touched = false;
@@ -159,141 +143,90 @@ export class EventDetailsComponent implements OnInit {
 
 
   onFillMatchedEvents(){
+    // debugger;
     this.matchedEvents = [];
 
     for(let i=0; i<this.eventVotingForm.value['options'].length; i++){
-      this.targetCounter.counter[i] = 0; 
+      if(this.targetCounter){
+        this.targetCounter.counter[i] = 0; 
+      }
     }
 
-    let counterLength ;
-    console.log('inside onFill', this.voteingData);
-
-    
+    let counterLength;
     
     
     this.voteingData.forEach(element => {
-      // debugger;
-      
+
+      /** check if this user voted before */
       let checkFirstVote = this.voteingData.find(element=>{
         if(element){
           this.userEmail = this.auth.getUserLoggedIn()['email'];
-          return element.email == this.userEmail;
+          return (element.email == this.userEmail) && (element.eventIndex == this.index);
         }
       });
 
-        if(element){     
-          
-          
+        if(element){
+          // debugger;
 
-
-        if(this.touched){
-          console.log('touched');
-
-          if((this.index == element.eventIndex) && (this.userEmail != element.email)){
-                this.matchedEvents.push(element);
+          if(this.touched){
+            if((this.index == element.eventIndex) && (this.userEmail != element.email)){
+                  this.matchedEvents.push(element);
               }
 
-          else if((this.index == element.eventIndex) && (this.userEmail == element.email)){
-              console.log('event that changes:', element);
-              element.option['options'] = this.eventVotingForm.value['options'];
-              this.matchedEvents.push(element);
-              
-            }
+            else if((this.index == element.eventIndex) && (this.userEmail == element.email)){
+                console.log('event that changes:', element);
+                element.option['options'] = this.eventVotingForm.value['options'];
+                this.matchedEvents.push(element);
+                
+              }
 
-            else if(checkFirstVote == undefined && this.notExistFlag ){
-                let lastMatched: VotingStatusModel;
-                lastMatched = {
-                  email:this.userEmail,
-                  eventIndex: this.index,
-                  option: this.eventVotingForm.value
-                }
+              else if(checkFirstVote == undefined && this.notExistFlag ){
+                debugger;
+                  let lastMatched: VotingStatusModel;
+                  lastMatched = {
+                    email:this.userEmail,
+                    eventIndex: this.index,
+                    option: this.eventVotingForm.value
+                  }
 
-                this.matchedEvents.push(lastMatched);
-                this.notExistFlag = false;
-
-            }
-          // this.touched = false;
-        } 
+                  this.matchedEvents.push(lastMatched);
+                  this.voteingData.push(lastMatched);
+                  this.notExistFlag = false;
+              }
+          } 
         
         else{
           if((this.index == element.eventIndex)){
             this.matchedEvents.push(element);
-            // if(this.userEmail == element.email){
-  
-            // }
-            // console.log('element', element.option['options']);
           }
+          else{
+            // debugger;
+          //   console.log('new event without votes');
+          //   counterLength =  this.eventsData[this.index].options.length;
+
+          //   if(counterLength){
+          //     let counterItem = {
+          //       eventIndex:this.index,
+          //       counter: []
+          //     }
+        
+          //     for(let i=0; i<counterLength;i++){
+          //       counterItem.counter.push(0);
+          //     }
+
+          //     this.targetCounter = counterItem; 
+            
+          // }
         }
-
-
-        // else if((this.index == element.eventIndex) && (this.userEmail == element.email)){
-        //   console.log('event that changes:', element);
-        //   element.option['options'] = this.eventVotingForm.value['options'];
-        //   this.matchedEvents.push(element);
-          
-        // }
-        // else if(checkFirstVote == undefined){
-        //   debugger;
-        //   console.log('new email has voted');
-        //   // this.matchedEvents.push();
-        //   let lastMatched: VotingStatusModel;
-        //   lastMatched = {
-        //     email:this.userEmail,
-        //     eventIndex: this.index,
-        //     option: null
-        //   }
-        //   // this.matchedEvents.push(lastMatched);
-        //   // checkFirstVote == null;
-        //   console.log('last matched', this.matchedEvents);
-          
-          
-
-        // }
+        }
       }
-
-
-
-      // if(element){        
-      //   if((this.index == element.eventIndex) && (this.userEmail != element.email)){
-      //     this.matchedEvents.push(element);
-      //     // if(this.userEmail == element.email){
-
-      //     // }
-      //     // console.log('element', element.option['options']);
-      //   }
-      //   else if((this.index == element.eventIndex) && (this.userEmail == element.email)){
-      //     console.log('event that changes:', element);
-      //     element.option['options'] = this.eventVotingForm.value['options'];
-      //     this.matchedEvents.push(element);
-          
-      //   }
-      //   else if(checkFirstVote == undefined){
-      //     debugger;
-      //     console.log('new email has voted');
-      //     // this.matchedEvents.push();
-      //     let lastMatched: VotingStatusModel;
-      //     lastMatched = {
-      //       email:this.userEmail,
-      //       eventIndex: this.index,
-      //       option: null
-      //     }
-      //     // this.matchedEvents.push(lastMatched);
-      //     // checkFirstVote == null;
-      //     console.log('last matched', this.matchedEvents);
-          
-          
-
-      //   }
-      // }
     });
 
 
     this.matchedEvents.forEach(item =>{
-      debugger;
       counterLength =  item.option['options'].length;
 
       if(counterLength && this.flag){
-        debugger;
         let counterItem = {
           eventIndex:this.index,
           counter: []
@@ -305,39 +238,46 @@ export class EventDetailsComponent implements OnInit {
   
         this.votingCounter.push(counterItem);
         this.flag = false;
-
       }
 
-
       this.targetCounter = this.votingCounter.find(element=>{
-        debugger
         return element.eventIndex == this.index;
       });
-      console.log('target Counter ', this.targetCounter.counter);
-
-   
-
-
-      
 
       for(let i=0; i<item.option['options'].length; i++){
 
         if(item.option['options'][i] == true){
-          debugger;
           this.targetCounter.counter[i]++;
         }
-        else{
-          
-        }
       }
-      
-
-        console.log('targetCounter outSide For', this.targetCounter.counter);
     });
 
 
-    return this.matchedEvents;
+      debugger;
+      this.viewVotePercentage = this.votingPercentage(this.matchedEvents.length, this.targetCounter.counter );
+    console.log('inject el func here');
+    
+  }
 
+
+  votingPercentage(totalCount, votesCount){
+    
+    let votesCountPercentage=[];
+    for(let i=0; i<votesCount.length; i++){
+      votesCountPercentage[i] = (votesCount[i]/totalCount)*100;
+    }
+    debugger;
+    return votesCountPercentage;
+  }
+
+  // this.viewVotePercentage
+
+
+  setMyStyles(index) {
+    let styles = {
+      'width':  this.viewVotePercentage[index] ? this.viewVotePercentage[index]+'%' : '0%',
+    };
+    return styles;
   }
 
 
