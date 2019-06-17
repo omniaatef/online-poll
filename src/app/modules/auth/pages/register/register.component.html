@@ -16,9 +16,9 @@
                     #firstName="ngModel"
                 >
 
-                <small *ngIf="!firstName.valid && firstName.touched" class="errorMessage" class="text-danger">
-                    *
-                </small>
+                <div  *ngIf="!firstName.valid && firstName.touched"  class="alert alert-danger mt-2">
+                    Enter a your first Name
+                </div>
 
             </div>
             <div class="col">
@@ -33,9 +33,10 @@
                     name="lastName"
                     #lastName="ngModel"
                 >
-                <small *ngIf="!lastName.valid && lastName.touched" class="errorMessage" class="text-danger">
-                    *
-                </small>
+                <div  *ngIf="!lastName.valid && lastName.touched"  class="alert alert-danger mt-2">
+                    Enter a your first Name
+                </div>
+
                 <!-- <span *ngIf="!lastName.valid && lastName.touched">Please enter a valid name</span> -->
                 
             </div>
@@ -58,9 +59,10 @@
                     #email="ngModel"
 
                 >
-                <small *ngIf="!email.valid && email.touched" class="errorMessage" class="text-danger">
-                    enter a valid Email
-                </small>
+
+                <div  *ngIf="!email.valid && email.touched"  class="alert alert-danger mt-2">
+                    Enter a Valid Email Address.
+                </div>
 
             </div>
         </div>
@@ -76,13 +78,14 @@
                     password
                     ngModel
                     name="password"
+                    minlength="6"
+                    maxlength="10"
                     #password="ngModel"
 
                 >
-                <small *ngIf="!password.valid && password.touched" class="errorMessage" class="text-danger">
-                    enter a valid Password
-                </small>
-
+                <div *ngIf="!password.valid && password.touched"  class="alert alert-danger mt-2">
+                    Password should not less than 6 characters.
+                </div>
             </div>
         </div>
 

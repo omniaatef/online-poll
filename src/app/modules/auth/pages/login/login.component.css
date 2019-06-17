@@ -57,3 +57,22 @@
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
+
+
+.errorMessage {
+    font-size: 15px;
+    text-align: left!important;
+}
+
+
+
+input.ng-touched.ng-invalid {
+    border:2px solid #f00;
+    background:#ffffc0;
+}
+
+input.ng-touched.ng-valid{
+    background-color: rgb(108, 197, 108);
+    color:#fff;
+}
+

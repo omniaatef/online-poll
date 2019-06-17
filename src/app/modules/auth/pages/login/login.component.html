@@ -14,9 +14,11 @@
         #email="ngModel"
 
     >
-    <small *ngIf="!email.valid && email.touched" class="errorMessage" class="text-danger">
-        enter a valid Email
-    </small>
+    <div  *ngIf="!email.valid && email.touched"  class="alert alert-danger mt-2">
+        <small>
+            Enter a valid Email
+        </small>
+        </div>
 
     <label for="inputPassword" class="sr-only">Password</label>
     <input 
@@ -26,13 +28,23 @@
         placeholder="Password" 
         required
         password
+        minlength="3"
+        maxlength="10"
         ngModel
         name="password"
         #password="ngModel"
     >
-    <small *ngIf="!password.valid && password.touched" class="errorMessage" class="text-danger">
-        enter a valid Password
-    </small>
+
+    <div  *ngIf="!password.valid && password.touched"  class="alert alert-danger mt-2">
+        <small>
+            Enter a valid Password
+        </small>
+    </div>
+    <div  *ngIf="" class="alert alert-danger mt-2">
+        <small>
+        </small>
+    </div>
+
 
     <div class="checkbox mb-3">
         <label class="text-left col">
@@ -42,4 +54,6 @@
     <button class="btn btn-lg btn-primary btn-block" type="submit" [disabled]="!signIn.valid">Sign in</button>
     <p class="mt-5 mb-3 text-muted">Not Registerd ? <a [routerLink]="['/auth/register']">Sign Up Now</a></p>
     <p class="mt-5 mb-3 text-muted">&copy; 2019</p>
+
+    
 </form>
