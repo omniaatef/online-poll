@@ -122,7 +122,7 @@
                                 <p class="card-text">
                                     {{ eventdetails.value }}
                                 </p>
-                                <li class="card-text" *ngFor="let option of this.createEventForm.get('options').controls">
+                                <li class="card-text" *ngFor="let option of this.createEventForm.get('options')['controls']">
                                     {{ option.value }}
                                 </li>
 
