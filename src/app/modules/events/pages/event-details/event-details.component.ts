@@ -9,6 +9,7 @@ import { VotingStatusModel } from 'src/app/core/models/voting-status.model';
 import { VotingCounterModel } from 'src/app/core/models/voting-counter.model';
 import { element } from '@angular/core/src/render3';
 import { debug } from 'util';
+import { VoteResultService } from 'src/app/core/services/vote-result.service';
 
 @Component({
   selector: 'app-event-details',
@@ -43,6 +44,9 @@ export class EventDetailsComponent implements OnInit {
 
   viewVotePercentage = [];
 
+  voteResults:VotingCounterModel[];
+  VoteResultCounter = [] ;
+
   // myStyles = {
   //   'width': '100%'
   //   }
@@ -51,7 +55,8 @@ export class EventDetailsComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private eventService: EventStorageService,
               private votingService: VotingStorageService,
-              private auth :AuthService
+              private auth :AuthService,
+              private voteResultService: VoteResultService
               )
         {
 
@@ -69,8 +74,6 @@ export class EventDetailsComponent implements OnInit {
     this.eventVotingForm = new FormGroup({
       'options': new FormArray([]),
     });
-
-
 
     /*Get event If Voted by current user */
     this.votingService.getVotingStatus().subscribe(
@@ -92,7 +95,6 @@ export class EventDetailsComponent implements OnInit {
       }
   );
   /**End of Voted by current user */
-
 
     /* Get Event Details for current event Index */
     this.eventService.getEventData().subscribe(
@@ -120,6 +122,14 @@ export class EventDetailsComponent implements OnInit {
       }
   );
 
+  
+  // var myVar = setInterval(function(){
+   
+    
+  // }, 1000);
+
+  this.getVoteResult();
+
 
   }
 
@@ -134,9 +144,28 @@ export class EventDetailsComponent implements OnInit {
       option: this.eventVotingForm.value
     }
     this.votingService.setVotingData(eventData);
-
+    
     this.touched = true;
     this.onFillMatchedEvents();
+    debugger;
+    // this.getVoteResult();
+    // let latestVoteResult = this.voteResultService.getCurrentVoteResult();
+    debugger;
+
+    console.log('this target counter: ',this.index, this.voteResultService.latestVoteResult);
+    
+    
+    this.targetCounter =  this.voteResultService.latestVoteResult.find(element => {
+      return element.eventIndex == this.index;
+    });
+   console.log('xx:',this.targetCounter);
+
+   this.VoteResultCounter = this.targetCounter.counter;
+   console.log('VoteResultCounter :',this.VoteResultCounter);
+
+   
+
+    
     this.touched = false;
     
   }
@@ -256,9 +285,19 @@ export class EventDetailsComponent implements OnInit {
       debugger;
       this.viewVotePercentage = this.votingPercentage(this.matchedEvents.length, this.targetCounter.counter );
     console.log('inject el func here');
+
+    let voteResult: VotingCounterModel = {
+      eventIndex:this.index,
+      counter:this.targetCounter.counter}
+    
+    
+
+    // this.voteResultService.storeVoteResult(voteResult);
+    this.voteResultService.setVoteResult(voteResult);
+    // this.voteResultService.storeVoteResult(voteResult).subscribe();
+    
     
   }
-
 
   votingPercentage(totalCount, votesCount){
     
@@ -270,14 +309,36 @@ export class EventDetailsComponent implements OnInit {
     return votesCountPercentage;
   }
 
-  // this.viewVotePercentage
-
-
   setMyStyles(index) {
     let styles = {
       'width':  this.viewVotePercentage[index] ? this.viewVotePercentage[index]+'%' : '0%',
     };
     return styles;
+  }
+
+   getVoteResult(){
+    debugger;
+      
+      this.voteResultService.getVoteResult().subscribe(
+        (res)=>{
+          console.log('get result success', res);
+          
+          let targetCounter = res.find(element => {
+            return element.eventIndex == this.index;
+          });
+  
+          console.log('target counter', targetCounter.counter);
+  
+          this.VoteResultCounter = targetCounter.counter;
+  
+          
+        },
+        (err)=>{
+          console.log('error occured while getting data', err);
+          
+        }
+      );
+    
   }
 
 

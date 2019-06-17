@@ -48,20 +48,35 @@
                                     <p class="text-danger">Result Of User Votes :</p>
                                     <hr />
                                     
-                                    <div *ngIf="eventItem" >
+                                    <!-- <div *ngIf="eventItem" >
                                         <div  *ngFor="let option of eventItem.options; let i = index">
                                             {{option}} 
                                             <span *ngIf="this.targetCounter">({{this.targetCounter.counter[i]}})</span>
-                                            <!-- <span *ngIf="this.targetCounter">( {{this.viewVotePercentage[i] | number}} %)</span> -->
                                             <span *ngIf="!this.targetCounter">(0)</span>:
                                             <div class="progress  progress-bar-striped active">
-                                                <!-- <div class="progress-bar  bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:"50%;"> -->
                                                     <div class="progress-bar  bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" [ngStyle]="setMyStyles(i)">
                                                         <span *ngIf="this.viewVotePercentage" class="">{{this.viewVotePercentage[i] | number}}%</span>
                                                     </div>
                                             </div>
                                             </div>
-                                        </div>
+                                        </div> -->
+
+
+
+                                        <div *ngIf="eventItem" >
+                                            <div  *ngFor="let option of eventItem.options; let i = index">
+                                                {{option}} 
+                                                <span *ngIf="this.VoteResultCounter">({{this.VoteResultCounter[i] }})</span>
+                                                <span *ngIf="!this.VoteResultCounter">(0)</span>:
+                                                <div class="progress  progress-bar-striped active">
+                                                        <div class="progress-bar  bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" [ngStyle]="setMyStyles(i)">
+                                                            <span *ngIf="this.viewVotePercentage" class="">{{this.viewVotePercentage[i] | number}}%</span>
+                                                        </div>
+                                                </div>
+                                                </div>
+                                            </div>
+
+
 
                                 </div>
 

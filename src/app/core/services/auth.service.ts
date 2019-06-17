@@ -14,7 +14,7 @@ export class AuthService{
     // Set data on localStorage
     setUserLoggedIn(user) {
         localStorage.setItem('user', JSON.stringify(user));
-        console.log('saved on localStorage');
+        // console.log('saved on localStorage');
       }
 
 
@@ -23,11 +23,11 @@ export class AuthService{
         if (localStorage.getItem('user')) {
 
         let res = JSON.parse(localStorage.getItem('user'));
-        console.log('local storage has a value',JSON.parse(localStorage.getItem('user')));
+        // console.log('local storage has a value',JSON.parse(localStorage.getItem('user')));
         return res;
         
         } else {
-        console.log('localStorage empty');
+        // console.log('localStorage empty');
         }
     }
 
@@ -41,7 +41,7 @@ export class AuthService{
         firebase.auth().createUserWithEmailAndPassword(email,password)
         .then(
            success => {
-            console.log('success register', success);
+            // console.log('success register', success);
             this.router.navigate(['/auth/login']);
            } 
         )
@@ -56,9 +56,9 @@ export class AuthService{
         .then(
             success => {
                 this.LoggedUser = email;
-                console.log("success login", success);
+                // console.log("success login", success);
                 this.router.navigate(['/dashboard/home']);
-                console.log("this.LoggedUser", this.LoggedUser);
+                // console.log("this.LoggedUser", this.LoggedUser);
 
                 // this.getToken();
                 this.setUserLoggedIn(success.user);
@@ -66,7 +66,7 @@ export class AuthService{
             }
         )
         .catch(
-            error => console.log("error login", error)
+            // error => console.log("error login", error)
             
         )
     }

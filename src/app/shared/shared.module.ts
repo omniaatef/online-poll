@@ -8,6 +8,8 @@ import { RouterModule } from '@angular/router';
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { EventsModule } from '../modules/events/events.module';
 import { EventListComponent } from './components/event-list/event-list.component';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { VoteInterceptor } from '../core/interceptors/vote.interceptor';
 
 @NgModule({
     imports: [
@@ -30,6 +32,9 @@ import { EventListComponent } from './components/event-list/event-list.component
 
       SpinnerComponent,
       EventListComponent
+    ],
+    providers:[
+      {provide: HTTP_INTERCEPTORS, useClass: VoteInterceptor, multi:true}
     ]
 })
 export class SharedModule { }
