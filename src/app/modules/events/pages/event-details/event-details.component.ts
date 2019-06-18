@@ -125,6 +125,7 @@ export class EventDetailsComponent implements OnInit {
 
 
   onVoteSelected(){
+    debugger;
     this.userEmail = this.auth.getUserLoggedIn()['email'];
     this.eventIndex = this.index;
     let eventData: VotingStatusModel = {

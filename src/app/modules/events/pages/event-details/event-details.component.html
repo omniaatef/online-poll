@@ -37,12 +37,18 @@
                                                 <li class="list-group-item" *ngFor="let option of eventItem.options; let i = index">
                                                     <div class="checkbox">
                                                         <label>
-                                                        <input (change)="onVoteSelected($event)"  #checkInput type="checkbox" [formControlName]="i"> {{option}}
+                                                        <!-- <input (change)="onVoteSelected($event)"  #checkInput type="checkbox" [formControlName]="i"> {{option}} -->
+                                                        <input  #checkInput type="checkbox" [formControlName]="i"> {{option}}
                                                     </label>
                                                     </div>
                                                 </li> 
                     
                                             </ul>
+
+                                <div class="card-footer">
+                                    <!-- <a href="#" class="btn btn-primary btn-sm btn-block"><span class="glyphicon glyphicon-bell"></span> Mark Your Vote</a> -->
+                                    <button class="btn btn-primary btn-sm btn-block" type="button" (click)="onVoteSelected($event)">Vote</button>
+                                </div>
 
                                             <br>
                                     <p class="text-danger">Result Of User Votes :</p>
