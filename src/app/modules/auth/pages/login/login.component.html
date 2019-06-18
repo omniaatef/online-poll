@@ -1,5 +1,5 @@
 <form class="form-signin" (ngSubmit)="onSubmit(signIn)" #signIn="ngForm">
-    <img class="mb-4" src="../../../../../assets/images/logo.png" alt="">
+    <img class="mb-4" src="../../../../../assets/images/poll-logo.jpg" alt="">
     <label for="inputEmail" class="sr-only">Email address</label>
 
     <input 
@@ -40,8 +40,9 @@
             Enter a valid Password
         </small>
     </div>
-    <div  *ngIf="" class="alert alert-danger mt-2">
+    <div  *ngIf="this.loginErrorMsg" class="alert alert-danger mt-2">
         <small>
+            {{this.loginErrorMsg}}
         </small>
     </div>
 

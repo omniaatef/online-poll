@@ -25,9 +25,9 @@
 
 
                             <form [formGroup]="eventVotingForm">
-                            <div class="card card-default">
+                            <div class="card card-default" *ngIf="eventItem">
                                     <div class="card-header bg-primary text-white">
-                                            <strong>Question : </strong>Which is the best responsive framework to start web designing ?
+                                            <strong>Question : </strong>{{eventItem.eventQuestion}}
         
                                 </div>
 

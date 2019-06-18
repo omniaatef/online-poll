@@ -1,0 +1,7 @@
+.navbar-brand{
+    width: 300px;
+}
+
+.navbar-brand img{
+    max-width: 100%;
+}

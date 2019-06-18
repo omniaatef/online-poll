@@ -47,11 +47,7 @@ export class EventDetailsComponent implements OnInit {
   voteResults:VotingCounterModel[];
   VoteResultCounter = [] ;
 
-  // myStyles = {
-  //   'width': '100%'
-  //   }
-
-
+  
   constructor(private route: ActivatedRoute,
               private eventService: EventStorageService,
               private votingService: VotingStorageService,
@@ -122,14 +118,7 @@ export class EventDetailsComponent implements OnInit {
       }
   );
 
-  
-  // var myVar = setInterval(function(){
-   
-    
-  // }, 1000);
-
   this.getVoteResult();
-
 
   }
 
@@ -147,24 +136,13 @@ export class EventDetailsComponent implements OnInit {
     
     this.touched = true;
     this.onFillMatchedEvents();
-    debugger;
-    // this.getVoteResult();
-    // let latestVoteResult = this.voteResultService.getCurrentVoteResult();
-    debugger;
 
-    console.log('this target counter: ',this.index, this.voteResultService.latestVoteResult);
-    
-    
+
     this.targetCounter =  this.voteResultService.latestVoteResult.find(element => {
       return element.eventIndex == this.index;
     });
-   console.log('xx:',this.targetCounter);
 
    this.VoteResultCounter = this.targetCounter.counter;
-   console.log('VoteResultCounter :',this.VoteResultCounter);
-
-   
-
     
     this.touched = false;
     
@@ -172,7 +150,6 @@ export class EventDetailsComponent implements OnInit {
 
 
   onFillMatchedEvents(){
-    // debugger;
     this.matchedEvents = [];
 
     for(let i=0; i<this.eventVotingForm.value['options'].length; i++){
@@ -195,7 +172,6 @@ export class EventDetailsComponent implements OnInit {
       });
 
         if(element){
-          // debugger;
 
           if(this.touched){
             if((this.index == element.eventIndex) && (this.userEmail != element.email)){
@@ -203,14 +179,12 @@ export class EventDetailsComponent implements OnInit {
               }
 
             else if((this.index == element.eventIndex) && (this.userEmail == element.email)){
-                console.log('event that changes:', element);
                 element.option['options'] = this.eventVotingForm.value['options'];
                 this.matchedEvents.push(element);
                 
               }
 
               else if(checkFirstVote == undefined && this.notExistFlag ){
-                debugger;
                   let lastMatched: VotingStatusModel;
                   lastMatched = {
                     email:this.userEmail,
@@ -228,25 +202,6 @@ export class EventDetailsComponent implements OnInit {
           if((this.index == element.eventIndex)){
             this.matchedEvents.push(element);
           }
-          else{
-            // debugger;
-          //   console.log('new event without votes');
-          //   counterLength =  this.eventsData[this.index].options.length;
-
-          //   if(counterLength){
-          //     let counterItem = {
-          //       eventIndex:this.index,
-          //       counter: []
-          //     }
-        
-          //     for(let i=0; i<counterLength;i++){
-          //       counterItem.counter.push(0);
-          //     }
-
-          //     this.targetCounter = counterItem; 
-            
-          // }
-        }
         }
       }
     });
@@ -282,20 +237,16 @@ export class EventDetailsComponent implements OnInit {
     });
 
 
-      debugger;
-      this.viewVotePercentage = this.votingPercentage(this.matchedEvents.length, this.targetCounter.counter );
-    console.log('inject el func here');
+      if(this.targetCounter){
+        this.viewVotePercentage = this.votingPercentage(this.matchedEvents.length, this.targetCounter.counter );
+        
+        let voteResult: VotingCounterModel = {
+          eventIndex:this.index,
+          counter:this.targetCounter.counter
+        }
 
-    let voteResult: VotingCounterModel = {
-      eventIndex:this.index,
-      counter:this.targetCounter.counter}
-    
-    
-
-    // this.voteResultService.storeVoteResult(voteResult);
-    this.voteResultService.setVoteResult(voteResult);
-    // this.voteResultService.storeVoteResult(voteResult).subscribe();
-    
+        this.voteResultService.setVoteResult(voteResult);
+      }
     
   }
 
@@ -305,7 +256,6 @@ export class EventDetailsComponent implements OnInit {
     for(let i=0; i<votesCount.length; i++){
       votesCountPercentage[i] = (votesCount[i]/totalCount)*100;
     }
-    debugger;
     return votesCountPercentage;
   }
 
@@ -317,7 +267,6 @@ export class EventDetailsComponent implements OnInit {
   }
 
    getVoteResult(){
-    debugger;
       
       this.voteResultService.getVoteResult().subscribe(
         (res)=>{
@@ -327,10 +276,14 @@ export class EventDetailsComponent implements OnInit {
             return element.eventIndex == this.index;
           });
   
-          console.log('target counter', targetCounter.counter);
-  
-          this.VoteResultCounter = targetCounter.counter;
-  
+          if(targetCounter){
+            this.VoteResultCounter = targetCounter.counter;
+          }
+          else{
+            for(let i=0; i<this.eventVotingForm.value['options'].length; i++){
+                this.VoteResultCounter[i] = 0; 
+            }
+          }
           
         },
         (err)=>{

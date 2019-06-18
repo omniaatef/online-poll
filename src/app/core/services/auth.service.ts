@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
 @Injectable()
 export class AuthService{
 
-    // token : string;
     LoggedUser: string;
 
     constructor(private router: Router){}
@@ -14,20 +13,16 @@ export class AuthService{
     // Set data on localStorage
     setUserLoggedIn(user) {
         localStorage.setItem('user', JSON.stringify(user));
-        // console.log('saved on localStorage');
       }
-
 
       // get data on localStorage
     getUserLoggedIn() {
         if (localStorage.getItem('user')) {
 
         let res = JSON.parse(localStorage.getItem('user'));
-        // console.log('local storage has a value',JSON.parse(localStorage.getItem('user')));
         return res;
         
         } else {
-        // console.log('localStorage empty');
         }
     }
 
@@ -36,12 +31,10 @@ export class AuthService{
         localStorage.clear();
       }
 
-
     registerUser(email:string, password:string){
         firebase.auth().createUserWithEmailAndPassword(email,password)
         .then(
            success => {
-            // console.log('success register', success);
             this.router.navigate(['/auth/login']);
            } 
         )
@@ -50,40 +43,19 @@ export class AuthService{
         )
     }
 
-
     loginUser(email:string, password:string){
-        firebase.auth().signInWithEmailAndPassword(email,password)
+        return firebase.auth().signInWithEmailAndPassword(email,password)
         .then(
             success => {
                 this.LoggedUser = email;
-                // console.log("success login", success);
                 this.router.navigate(['/dashboard/home']);
-                // console.log("this.LoggedUser", this.LoggedUser);
 
-                // this.getToken();
                 this.setUserLoggedIn(success.user);
-
             }
         )
-        .catch(
-            // error => console.log("error login", error)
-            
-        )
     }
-
-    // getToken(){
-    //    firebase.auth().currentUser.getIdToken()
-    //    .then(
-    //     (token: string) => this.token = token
-    //    );
-    //    return this.token;
-    // }
-
+    
     isLoggedin(){
         return this.LoggedUser !=null;
     }
-
-    // isAuthenticated() {
-    //     return this.token != null;
-    //   }
 }

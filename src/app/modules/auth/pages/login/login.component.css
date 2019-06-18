@@ -76,3 +76,7 @@ input.ng-touched.ng-valid{
     color:#fff;
 }
 
+.form-signin img{
+    max-width: 100%;
+}
+
