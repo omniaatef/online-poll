@@ -15,6 +15,12 @@
                       >
 
                   </div>
+                  <div  *ngIf="!this.createEventForm.controls.eventName.valid && this.createEventForm.controls.eventName.touched"  class="alert alert-danger mt-2">
+                    <small>
+                        This field is required.
+                    </small>
+                    </div>
+
                   <div class="form-group">
                         <label for="exampleFormControlInput1">Event Image:</label>
                         <input
@@ -26,6 +32,12 @@
                             #eventimage
                         >
                   </div>
+                  <div  *ngIf="!this.createEventForm.controls.image.valid && this.createEventForm.controls.image.touched"  class="alert alert-danger mt-2">
+                    <small>
+                        This field is required.
+                    </small>
+                    </div>
+
                   <div class="form-group">
                       <label for="exampleFormControlInput1">Event date:</label>
                       <input
@@ -36,6 +48,12 @@
                             #eventdate
                       >
                   </div>
+                  <div  *ngIf="!this.createEventForm.controls.date.valid && this.createEventForm.controls.date.touched"  class="alert alert-danger mt-2">
+                    <small>
+                        This field is required.
+                    </small>
+                    </div>
+                  
                   <div class="form-group">
                       <label for="exampleFormControlTextarea1">Event Details:</label>
                       <textarea
@@ -47,6 +65,11 @@
                             #eventdetails
                       ></textarea>
                   </div>
+                  <div  *ngIf="!this.createEventForm.controls.details.valid && this.createEventForm.controls.details.touched"  class="alert alert-danger mt-2">
+                    <small>
+                        This field is required.
+                    </small>
+                    </div>
 
                   <div class="form-group">
                     <label for="exampleFormControlInput1">Vote Question:</label>
@@ -59,6 +82,12 @@
                           #eventquestion
                     >
                 </div>
+                <div  *ngIf="!this.createEventForm.controls.eventQuestion.valid && this.createEventForm.controls.eventQuestion.touched"  class="alert alert-danger mt-2">
+                    <small>
+                        This field is required.
+                    </small>
+                    </div>
+                
 
                     <div   formArrayName="options" class="form-group">
                         <label for="exampleFormControlInput1">Vote Options:</label>
@@ -79,12 +108,19 @@
                                         Delete
                                 </button>
                             </div>
+                         
                         </div>
+                        
                         <div class="form-group mb-2">
                             <button class="btn btn-primary btn-sm btn-block" type="button" (click)="onAddOption()">Add</button>
                         </div>
 
                     </div>
+                    <div  *ngIf="!this.createEventForm.controls.options.valid && this.createEventForm.controls.options.touched"  class="alert alert-danger mt-2">
+                        <small>
+                            You should add minimum 2 options.
+                        </small>
+                        </div>
 
                   <div class="form-group">
                       <label for="exampleFormControlTextarea1">Additional Information:</label>

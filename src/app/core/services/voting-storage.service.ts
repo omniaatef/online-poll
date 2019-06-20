@@ -10,10 +10,13 @@ export class VotingStorageService {
 
     voteingData: VotingStatusModel[] = [];
 
+    storedStatus: boolean = true;
+
     constructor(private http : HttpClient){
     }
 
     setVotingData(votingData: VotingStatusModel){
+        this.storedStatus = false
         
         this.getVotingStatus().subscribe(
             (res)=>{
@@ -33,7 +36,24 @@ export class VotingStorageService {
                   else{
                     this.voteingData.push(votingData);
                   }
-                this.storeVotingStatus(this.voteingData).subscribe();
+                this.storeVotingStatus(this.voteingData).subscribe(
+                    (success)=>{
+                        console.log('2- inside storeVotingStatus success');
+                },
+                ()=>{},
+                ()=>{
+                        console.log('3- inside storeVotingStatus - Complete');
+                        this.storedStatus = true;
+
+                }                
+                );
+            },
+            ()=>{}
+            ,
+            ()=>{
+                console.log('1- inside getVotingStatus - Complete ');
+                this.storedStatus = false;
+                
             }
         );
     }

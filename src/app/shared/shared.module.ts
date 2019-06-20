@@ -10,6 +10,7 @@ import { EventsModule } from '../modules/events/events.module';
 import { EventListComponent } from './components/event-list/event-list.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { VoteInterceptor } from '../core/interceptors/vote.interceptor';
+import { DisableControlDirective } from './directives/disable-control.directive';
 
 @NgModule({
     imports: [
@@ -20,7 +21,9 @@ import { VoteInterceptor } from '../core/interceptors/vote.interceptor';
     ],
     declarations: [
       SpinnerComponent,
-      EventListComponent
+      EventListComponent,
+      DisableControlDirective
+      
     ],
     exports: [
       CommonModule,
@@ -31,7 +34,8 @@ import { VoteInterceptor } from '../core/interceptors/vote.interceptor';
       // MaterialModule,
 
       SpinnerComponent,
-      EventListComponent
+      EventListComponent,
+      DisableControlDirective
     ],
     providers:[
       {provide: HTTP_INTERCEPTORS, useClass: VoteInterceptor, multi:true}

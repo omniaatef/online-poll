@@ -2,6 +2,7 @@ import { Component, OnInit, OnChanges } from '@angular/core';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { EventStorageService } from 'src/app/core/services/event-storage.service';
 import { eventForm } from 'src/app/core/models/event-form.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-event',
@@ -13,7 +14,7 @@ export class CreateEventComponent implements OnInit, OnChanges {
   createEventForm : FormGroup;
   // eventData: eventForm[];
 
-  constructor(private EventService: EventStorageService) {
+  constructor(private EventService: EventStorageService, private router: Router) {
 
    }
 
@@ -24,11 +25,11 @@ export class CreateEventComponent implements OnInit, OnChanges {
       'date': new FormControl('', Validators.required),
       'details': new FormControl('',  Validators.required),
       'eventQuestion': new FormControl('',  Validators.required),
-      'options': new FormArray([], Validators.required),
+      'options': new FormArray([], [Validators.required, Validators.minLength(2)]),
       'info': new FormControl('')
     });
 
-    console.log('inside Submit Form', this.createEventForm.value);
+    console.log('inside Submit Form', this.createEventForm);
 
 
 
@@ -59,6 +60,8 @@ export class CreateEventComponent implements OnInit, OnChanges {
       {
         console.log('inside response', res);
         this.createEventForm.reset();
+        this.router.navigate(['/events']);
+
       },
       (err:Error) => console.log('Inside Erro', err)
     );

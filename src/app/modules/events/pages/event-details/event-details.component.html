@@ -38,7 +38,7 @@
                                                     <div class="checkbox">
                                                         <label>
                                                         <!-- <input (change)="onVoteSelected($event)"  #checkInput type="checkbox" [formControlName]="i"> {{option}} -->
-                                                        <input  #checkInput type="checkbox" [formControlName]="i"> {{option}}
+                                                        <input [disableControl]="!this.votingService.storedStatus" (change)="change(this.eventVotingForm.value.options)"  #checkInput type="checkbox" [formControlName]="i"> {{option}}
                                                     </label>
                                                     </div>
                                                 </li> 
@@ -47,7 +47,7 @@
 
                                 <div class="card-footer">
                                     <!-- <a href="#" class="btn btn-primary btn-sm btn-block"><span class="glyphicon glyphicon-bell"></span> Mark Your Vote</a> -->
-                                    <button class="btn btn-primary btn-sm btn-block" type="button" (click)="onVoteSelected($event)">Vote</button>
+                                    <button [disabled]="!this.checkFormDirty" class="btn btn-primary btn-sm btn-block" type="button" (click)="onVoteBtnClick($event)">Vote</button>
                                 </div>
 
                                             <br>

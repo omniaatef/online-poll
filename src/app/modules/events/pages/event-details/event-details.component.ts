@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges } from '@angular/core';
+import { Component, OnInit, OnChanges, SimpleChanges, Input } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { EventStorageService } from 'src/app/core/services/event-storage.service';
 import { eventForm } from 'src/app/core/models/event-form.model';
@@ -16,7 +16,7 @@ import { VoteResultService } from 'src/app/core/services/vote-result.service';
   templateUrl: './event-details.component.html',
   styleUrls: ['./event-details.component.css']
 })
-export class EventDetailsComponent implements OnInit {
+export class EventDetailsComponent implements OnInit , OnChanges {
 
   eventsData: eventForm[];
   index :number;
@@ -47,6 +47,10 @@ export class EventDetailsComponent implements OnInit {
   voteResults:VotingCounterModel[];
   VoteResultCounter = [] ;
 
+  PrevFormStatus:FormGroup;
+
+  checkFormDirty:boolean = false;
+
   
   constructor(private route: ActivatedRoute,
               private eventService: EventStorageService,
@@ -63,6 +67,29 @@ export class EventDetailsComponent implements OnInit {
           }
         );
         }
+
+
+  // @Input()
+  // ck=true;
+
+  ngOnChanges(changes: SimpleChanges){
+    console.log("2");
+  }
+
+  change(index){
+    console.log('previous form status:', this.eventVotingForm.value);
+    console.log('previous form status Prev:', this.PrevFormStatus);
+    console.log('previous form status dirty:', this.eventVotingForm.dirty);
+    
+    console.log('inside change: ',index);
+
+    this.checkFormDirty = this.eventVotingForm.dirty;
+
+    
+
+
+    
+  }
 
 
   ngOnInit() {
@@ -120,11 +147,18 @@ export class EventDetailsComponent implements OnInit {
 
   this.getVoteResult();
 
+  console.log('check input status: ', this.eventVotingForm);
+
+  // this.PrevFormStatus = new FormGroup(this.eventVotingForm.controls) ;
+  
+
   }
 
 
 
-  onVoteSelected(){
+  onVoteBtnClick(){
+    console.log('Begin of Click',this.votingService.storedStatus);
+    
     debugger;
     this.userEmail = this.auth.getUserLoggedIn()['email'];
     this.eventIndex = this.index;
@@ -143,9 +177,15 @@ export class EventDetailsComponent implements OnInit {
       return element.eventIndex == this.index;
     });
 
-   this.VoteResultCounter = this.targetCounter.counter;
+    this.VoteResultCounter = this.targetCounter.counter;
+    console.log('end of Click',this.votingService.storedStatus);
+
     
     this.touched = false;
+    this.checkFormDirty = false;
+
+    console.log('check form status: ', this.eventVotingForm);
+
     
   }
 
@@ -209,6 +249,7 @@ export class EventDetailsComponent implements OnInit {
 
 
     this.matchedEvents.forEach(item =>{
+      debugger;
       counterLength =  item.option['options'].length;
 
       if(counterLength && this.flag){
@@ -252,7 +293,7 @@ export class EventDetailsComponent implements OnInit {
   }
 
   votingPercentage(totalCount, votesCount){
-    
+    debugger;
     let votesCountPercentage=[];
     for(let i=0; i<votesCount.length; i++){
       votesCountPercentage[i] = (votesCount[i]/totalCount)*100;
