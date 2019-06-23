@@ -24,9 +24,9 @@ export class VoteResultService {
                 debugger;
                 console.log('res:', res);
                 
+                if(res){
                 this.voteResult = res;
 
-                if(this.voteResult){
                     
                     var eventItem = this.voteResult.find(
                         function(eventEl) {
@@ -57,10 +57,18 @@ export class VoteResultService {
                               
                           }
                       );
+                }else{
+                    console.log('awl mara',);
+                    this.voteResult.push(voteResult);
+                    this.storeVoteResult(this.voteResult).subscribe();
+                    
                 }
 
             },
-            (err)=>{},
+            (err)=>{
+                console.log('inside get vote result error:', err);
+                
+            },
             ()=>{
                 debugger;
                 console.log('completed..!');

@@ -60,10 +60,21 @@ export class CreateEventComponent implements OnInit, OnChanges {
       {
         console.log('inside response', res);
         this.createEventForm.reset();
-        this.router.navigate(['/events']);
-
+        
       },
-      (err:Error) => console.log('Inside Erro', err)
+      (err:Error) => console.log('Inside Erro', err),
+      ()=>{
+        this.EventService.getEventData().subscribe(
+          (res)=>{
+            console.log('Get - inside complete - inside res: ',res);
+            
+            console.log('event id ', (res.length)-1);
+            
+            
+            this.router.navigate([`/events/event-details/${(res.length)-1}`]);
+          }
+        )
+      }
     );
   }
 

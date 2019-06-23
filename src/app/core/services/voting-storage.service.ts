@@ -21,26 +21,41 @@ export class VotingStorageService {
         this.getVotingStatus().subscribe(
             (res)=>{
                 debugger;
+                if(res){
+                    
                 this.voteingData = res;
-                var eventItem = this.voteingData.find(
-                    function(eventEl) {
-                    if(eventEl){
-                        return eventEl['email'] == votingData.email && eventEl['eventIndex'] == votingData.eventIndex;
+
+
+                    var eventItem = this.voteingData.find(
+                        function(eventEl) {
+                            if(eventEl){
+                                return eventEl['email'] == votingData.email && eventEl['eventIndex'] == votingData.eventIndex;
+                            }
+                        }
+                        );
+                        
+                        
+                        if(eventItem){
+                            eventItem.option = votingData.option; 
+                        }
+                        else{
+                            debugger;
+                            this.voteingData.push(votingData);
+                        }
+                        
+                    }else{
+                        this.voteingData.push(votingData);
                     }
-                }
-                );
-        
-                  if(eventItem){
-                    eventItem.option = votingData.option; 
-                  }
-                  else{
-                    this.voteingData.push(votingData);
-                  }
+
+
                 this.storeVotingStatus(this.voteingData).subscribe(
                     (success)=>{
                         console.log('2- inside storeVotingStatus success');
                 },
-                ()=>{},
+                (err)=>{
+                    console.log('error while store:', err);
+                    
+                },
                 ()=>{
                         console.log('3- inside storeVotingStatus - Complete');
                         this.storedStatus = true;
@@ -60,6 +75,7 @@ export class VotingStorageService {
 
 
     storeVotingStatus(voteingData: VotingStatusModel[]){
+        debugger;
         return this.http.put('https://online-poll-84371.firebaseio.com/VotingData.json', voteingData);
     }
 

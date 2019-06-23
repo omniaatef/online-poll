@@ -22,11 +22,11 @@ export class EventListComponent implements OnInit {
       Response => {
           this.eventsData = [];
           for (let item of Response){
-              this.eventsData.push(item[1]);
+              this.eventsData.unshift(item[1]);
           }
 
-          this.eventsData.reverse();
-          console.log('home this.eventsData after', this.eventsData);
+          // this.eventsData.reverse();
+          // console.log('home this.eventsData after', this.eventsData);
       },
       error => console.log('home events error', error)
   );
@@ -52,8 +52,6 @@ export class EventListComponent implements OnInit {
     
   // );
   }
-
-
   
 
 }

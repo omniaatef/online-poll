@@ -93,6 +93,7 @@ export class EventDetailsComponent implements OnInit , OnChanges {
 
 
   ngOnInit() {
+    debugger;
 
     this.eventVotingForm = new FormGroup({
       'options': new FormArray([]),
@@ -108,13 +109,15 @@ export class EventDetailsComponent implements OnInit , OnChanges {
           this.voteingData = res;
           this.onFillMatchedEvents();
 
+          if(this.voteingData){
             this.eventItemFounded = this.voteingData.find(
               function(eventEl) {
-              if(eventEl){
+                if(eventEl){
                   return eventEl['email'] == newUserEmail && eventEl['eventIndex'] == newEventIndex;
+                }
               }
-          }
-          );
+              );
+            }
       }
   );
   /**End of Voted by current user */
@@ -159,7 +162,7 @@ export class EventDetailsComponent implements OnInit , OnChanges {
   onVoteBtnClick(){
     console.log('Begin of Click',this.votingService.storedStatus);
     
-    debugger;
+    // debugger;
     this.userEmail = this.auth.getUserLoggedIn()['email'];
     this.eventIndex = this.index;
     let eventData: VotingStatusModel = {
@@ -167,17 +170,23 @@ export class EventDetailsComponent implements OnInit , OnChanges {
       eventIndex: this.eventIndex,
       option: this.eventVotingForm.value
     }
+    debugger;
     this.votingService.setVotingData(eventData);
     
     this.touched = true;
     this.onFillMatchedEvents();
 
+    if(this.voteResultService.latestVoteResult){
 
-    this.targetCounter =  this.voteResultService.latestVoteResult.find(element => {
-      return element.eventIndex == this.index;
-    });
+      this.targetCounter =  this.voteResultService.latestVoteResult.find(element => {
+        if(element){
+          return element.eventIndex == this.index;
+        }
+      });
+      
+      this.VoteResultCounter = this.targetCounter.counter;
+    }
 
-    this.VoteResultCounter = this.targetCounter.counter;
     console.log('end of Click',this.votingService.storedStatus);
 
     
@@ -201,7 +210,8 @@ export class EventDetailsComponent implements OnInit , OnChanges {
 
     let counterLength;
     
-    
+    if(this.voteingData){
+
     this.voteingData.forEach(element => {
 
       /** check if this user voted before */
@@ -246,10 +256,11 @@ export class EventDetailsComponent implements OnInit , OnChanges {
         }
       }
     });
+  }
 
 
     this.matchedEvents.forEach(item =>{
-      debugger;
+      // debugger;
       counterLength =  item.option['options'].length;
 
       if(counterLength && this.flag){
@@ -278,7 +289,7 @@ export class EventDetailsComponent implements OnInit , OnChanges {
       }
     });
 
-
+    debugger;
       if(this.targetCounter){
         this.viewVotePercentage = this.votingPercentage(this.matchedEvents.length, this.targetCounter.counter );
         
@@ -293,7 +304,7 @@ export class EventDetailsComponent implements OnInit , OnChanges {
   }
 
   votingPercentage(totalCount, votesCount){
-    debugger;
+    // debugger;
     let votesCountPercentage=[];
     for(let i=0; i<votesCount.length; i++){
       votesCountPercentage[i] = (votesCount[i]/totalCount)*100;
@@ -309,21 +320,27 @@ export class EventDetailsComponent implements OnInit , OnChanges {
   }
 
    getVoteResult(){
+     debugger;
       
       this.voteResultService.getVoteResult().subscribe(
         (res)=>{
           console.log('get result success', res);
           
-          let targetCounter = res.find(element => {
-            return element.eventIndex == this.index;
-          });
-  
-          if(targetCounter){
-            this.VoteResultCounter = targetCounter.counter;
-          }
-          else{
-            for(let i=0; i<this.eventVotingForm.value['options'].length; i++){
+          if(res){
+
+            let targetCounter = res.find(element => {
+              if(element){
+                return element.eventIndex == this.index;
+              }
+            });
+            
+            if(targetCounter){
+              this.VoteResultCounter = targetCounter.counter;
+            }
+            else{
+              for(let i=0; i<this.eventVotingForm.value['options'].length; i++){
                 this.VoteResultCounter[i] = 0; 
+              }
             }
           }
           
