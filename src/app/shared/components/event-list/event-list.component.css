@@ -1,6 +1,7 @@
 .card {
     height: 275px;
     overflow: hidden;
+    margin: 25px 0;
 }
 
 
@@ -11,3 +12,4 @@
 .card-text {
     font-size: 14px;
 }
+
