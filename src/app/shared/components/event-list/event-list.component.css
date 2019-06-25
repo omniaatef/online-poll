@@ -1,0 +1,13 @@
+.card {
+    height: 275px;
+    overflow: hidden;
+}
+
+
+.card-img-top {
+    max-height: 150px;
+}
+
+.card-text {
+    font-size: 14px;
+}
