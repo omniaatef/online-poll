@@ -6,6 +6,7 @@ import { mergeMapTo } from 'rxjs/operators';
 import { take } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs'
 import { VoteResultService } from 'src/app/core/services/vote-result.service';
+import { SpinnerComponent } from '../components/spinner/spinner.component';
 
 @Injectable()
 export class MessagingService {
@@ -13,6 +14,8 @@ export class MessagingService {
   currentMessage = new BehaviorSubject(null);
 
   currentVoteResult = new BehaviorSubject(null);
+
+  showLoading:boolean = false;
 
   constructor(
     private angularFireDB: AngularFireDatabase,
@@ -87,10 +90,12 @@ export class MessagingService {
   receiveVoteResult(eventIndex) {
     debugger;
     console.log('gwa receiveVoteResult - index:', eventIndex);
-
+    
+    this.showLoading = true;
     this.angularFireMessaging.messages.subscribe(
       (payload) => {
-        
+        // this.spinnerComponet.isLoading = true;
+       
         this.VoteResultService.getVoteResult().subscribe(
           (payload) => {
           debugger;
@@ -110,11 +115,17 @@ export class MessagingService {
             this.currentVoteResult.next(updatedVoteResult.counter);
             
           },
-          err=>console.log('error while getting vote result')
+          err=>console.log('error while getting vote result'),
+          ()=>{
+              // this.spinnerComponet.isLoading = false;
+              this.showLoading = false;
+
+
+          }
           
           )
-        
-      });
+          
+        });
   }
 
 

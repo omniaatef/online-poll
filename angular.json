@@ -26,7 +26,8 @@
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "src/styles.css"
+              "src/styles.css",
+              "https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
             ],
             "scripts": [],
             "es5BrowserSupport": true

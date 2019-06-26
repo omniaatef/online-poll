@@ -61,6 +61,9 @@ export class EventDetailsComponent implements OnInit , OnChanges {
   message;
 
 
+  ResultShowing;
+
+
   
   constructor(private route: ActivatedRoute,
               private eventService: EventStorageService,
@@ -188,6 +191,8 @@ export class EventDetailsComponent implements OnInit , OnChanges {
 
 
   onVoteBtnClick(){
+
+    this.messagingService.showLoading = true;
     console.log('Begin of Click',this.votingService.storedStatus);
     
     // debugger;
@@ -246,6 +251,8 @@ export class EventDetailsComponent implements OnInit , OnChanges {
     // });
 
 console.log('type of this.voteResult',typeof(this.voteResult) );
+this.ResultShowing = this.messagingService.showLoading;
+console.log('--- result shoinwg', this.ResultShowing);
 
     
   }
@@ -343,7 +350,7 @@ console.log('type of this.voteResult',typeof(this.voteResult) );
 
     debugger;
       if(this.targetCounter){
-        this.viewVotePercentage = this.votingPercentage(this.matchedEvents.length, this.targetCounter.counter );
+        // this.viewVotePercentage = this.votingPercentage(this.matchedEvents.length, this.targetCounter.counter );
         
         let voteResult: VotingCounterModel = {
           eventIndex:this.index,
@@ -355,21 +362,21 @@ console.log('type of this.voteResult',typeof(this.voteResult) );
     
   }
 
-  votingPercentage(totalCount, votesCount){
-    // debugger;
-    let votesCountPercentage=[];
-    for(let i=0; i<votesCount.length; i++){
-      votesCountPercentage[i] = (votesCount[i]/totalCount)*100;
-    }
-    return votesCountPercentage;
-  }
+  // votingPercentage(totalCount, votesCount){
+  //   // debugger;
+  //   let votesCountPercentage=[];
+  //   for(let i=0; i<votesCount.length; i++){
+  //     votesCountPercentage[i] = (votesCount[i]/totalCount)*100;
+  //   }
+  //   return votesCountPercentage;
+  // }
 
-  setMyStyles(index) {
-    let styles = {
-      'width':  this.viewVotePercentage[index] ? this.viewVotePercentage[index]+'%' : '0%',
-    };
-    return styles;
-  }
+  // setMyStyles(index) {
+  //   let styles = {
+  //     'width':  this.viewVotePercentage[index] ? this.viewVotePercentage[index]+'%' : '0%',
+  //   };
+  //   return styles;
+  // }
 
 
 
