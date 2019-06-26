@@ -10,6 +10,9 @@ import { VotingCounterModel } from 'src/app/core/models/voting-counter.model';
 import { element } from '@angular/core/src/render3';
 import { debug } from 'util';
 import { VoteResultService } from 'src/app/core/services/vote-result.service';
+import { MessagingService } from 'src/app/shared/services/messaging.service';
+import { AngularFireDatabase } from '@angular/fire/database';
+import { fcmTokenModel } from 'src/app/core/models/fcm-token.model';
 
 @Component({
   selector: 'app-event-details',
@@ -51,12 +54,22 @@ export class EventDetailsComponent implements OnInit , OnChanges {
 
   checkFormDirty:boolean = false;
 
+  fcmTokens:fcmTokenModel[]=[];
+
+  voteResult;
+
+  message;
+
+
   
   constructor(private route: ActivatedRoute,
               private eventService: EventStorageService,
               private votingService: VotingStorageService,
               private auth :AuthService,
-              private voteResultService: VoteResultService
+              private voteResultService: VoteResultService,
+              private angularFireDB: AngularFireDatabase,
+              private messagingService: MessagingService,
+               private authService:AuthService
               )
         {
 
@@ -94,6 +107,24 @@ export class EventDetailsComponent implements OnInit , OnChanges {
 
   ngOnInit() {
     debugger;
+
+
+    // this.SendNotification();
+
+    let user = this.authService.getUserLoggedIn(); 
+    console.log('user:', user.uid);
+
+    const userId = user.uid;
+    this.messagingService.requestPermission(userId);
+    console.log('el event index:', this.index);
+    
+    // this.messagingService.receiveMessage(this.index);
+    this.messagingService.receiveVoteResult(this.index);
+    // this.message = this.messagingService.currentMessage;
+    this.voteResult = this.messagingService.currentVoteResult;
+    console.log('this.voteResult :', this.voteResult);
+
+
 
     this.eventVotingForm = new FormGroup({
       'options': new FormArray([]),
@@ -148,12 +179,9 @@ export class EventDetailsComponent implements OnInit , OnChanges {
       }
   );
 
-  this.getVoteResult();
+  // get vote result async
+    // this.getVoteResult();
 
-  console.log('check input status: ', this.eventVotingForm);
-
-  // this.PrevFormStatus = new FormGroup(this.eventVotingForm.controls) ;
-  
 
   }
 
@@ -185,6 +213,7 @@ export class EventDetailsComponent implements OnInit , OnChanges {
       });
       
       this.VoteResultCounter = this.targetCounter.counter;
+      // this.SendNotification();
     }
 
     console.log('end of Click',this.votingService.storedStatus);
@@ -194,6 +223,29 @@ export class EventDetailsComponent implements OnInit , OnChanges {
     this.checkFormDirty = false;
 
     console.log('check form status: ', this.eventVotingForm);
+
+    debugger;
+    console.log('get token',this.auth.getUserLoggedIn());
+    // console.log('angularFireDB',this.angularFireDB(''));
+    
+    debugger;
+
+    // this.fcmTokens.forEach(token => {
+    //   console.log('-- get tokens', token);
+      
+    //   // this.voteResultService.sendNotifications(token).subscribe(
+    //   //   (res)=>{
+    //   //     console.log('inside send notifications response');
+    //   //   },
+    //   //   (err)=> {
+    //   //     console.log('inside send notifications error');
+          
+    //   //   }
+    //   // );
+      
+    // });
+
+console.log('type of this.voteResult',typeof(this.voteResult) );
 
     
   }
@@ -319,6 +371,15 @@ export class EventDetailsComponent implements OnInit , OnChanges {
     return styles;
   }
 
+
+
+  // setMyStyles(counter) {
+  //   let styles = {
+  //     'width':  this.viewVotePercentage[index] ? this.viewVotePercentage[index]+'%' : '0%',
+  //   };
+  //   return styles;
+  // }
+
    getVoteResult(){
      debugger;
       
@@ -351,6 +412,24 @@ export class EventDetailsComponent implements OnInit , OnChanges {
         }
       );
     
+  }
+
+
+  SendNotification(){
+    debugger;
+    let user = this.authService.getUserLoggedIn(); 
+    console.log('user:', user.uid);
+
+    const userId = user.uid;
+    this.messagingService.requestPermission(userId);
+    console.log('el event index:', this.index);
+    
+    this.messagingService.receiveMessage(this.index);
+    this.messagingService.receiveVoteResult(this.index);
+    this.message = this.messagingService.currentMessage;
+    this.voteResult = this.messagingService.currentVoteResult;
+    console.log('this.voteResult :', this.voteResult);
+
   }
 
 

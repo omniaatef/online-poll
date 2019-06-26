@@ -1,10 +1,12 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { eventForm } from '../models/event-form.model';
 
 import 'rxjs/Rx';
 import { VotingCounterModel } from '../models/voting-counter.model';
 import { debug } from 'util';
+import { fcmTokenModel } from '../models/fcm-token.model';
+import { Observable } from 'rxjs/Rx';
 
 @Injectable()
 export class VoteResultService {
@@ -14,11 +16,47 @@ export class VoteResultService {
 
     latestVoteResult;
 
-    constructor(private http : HttpClient){}
+    voteResultRecieved: Observable<{}>;
+
+    fcmTokens:fcmTokenModel[]=[];
+
+    constructor(private http : HttpClient,
+        ){}
+
+
+
 
 
     setVoteResult(voteResult: VotingCounterModel){
         debugger;
+
+
+        
+  // /** Get tokens that saved */
+
+            this.getFcmTokens().subscribe(
+              res=>{
+                console.log('token response', res);
+                if(res){
+                  // this.fcmTokens.push
+                  this.fcmTokens = [];
+                  res.forEach(element => {
+                    this.fcmTokens.push(element[1]);
+                  });
+                }
+                
+              },
+              err=>{
+                console.log('token error', err);
+                
+              },
+              ()=>{
+                console.log('fcmTokens in Array', this.fcmTokens);
+                
+              }
+            );
+
+
         this.getVoteResult().subscribe(
             (res)=>{
                 debugger;
@@ -53,6 +91,24 @@ export class VoteResultService {
                           ()=>{
                               console.log('inside complete vote store');
                               this.latestVoteResult = this.getCurrentVoteResult();
+                              console.log('el vote result after stored:', this.latestVoteResult);
+
+                                                        
+                                this.fcmTokens.forEach(token => {
+                                console.log('-- get tokens', token);
+                                
+                                this.sendNotifications(token).subscribe(
+                                  (res)=>{
+                                    console.log('inside send notifications response');
+                                  },
+                                  (err)=> {
+                                    console.log('inside send notifications error');
+                                    
+                                  }
+                                );
+                                
+                                });
+
                               
                               
                           }
@@ -109,6 +165,40 @@ export class VoteResultService {
 
             //     }
             //   )
+    }
+
+
+    sendNotifications(token){
+        let headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': 'key=AAAA7LNi-HQ:APA91bHBpqq-lDu_kID2V5_RcsZYicB2nGfWmeX9DzQ3K6d19Mhhc_HPFwgk06vKHMpG83lE7ZraY0nAdTFol9ranZfZKv4s1fOh4BNj-UK9Jvb3FUsmL68OmltZiLfN5SmfISjQ4Vo0'
+         });
+        let options = { headers: headers };
+        
+        return this.http.post('https://fcm.googleapis.com/fcm/send',
+                { 
+                "notification":
+                                {
+                                "title": "Online Poll", 
+                                "body": "Please check New Voting Results"
+                                },
+                "to" : token
+            }
+            ,options);
+    }
+
+    getFcmTokens(){
+        debugger;
+        return this.http.get<fcmTokenModel[]>('https://online-poll-84371.firebaseio.com/fcmTokens.json')
+        .map(
+            (fcmTokenData)=>{
+              console.log('inside map - fcmTokenData',fcmTokenData);
+              const fcmTokenEntries = Object.entries(fcmTokenData)
+                console.log('fcmTokenEntries',fcmTokenEntries)
+                return fcmTokenEntries
+
+            }
+          )
     }
 
 

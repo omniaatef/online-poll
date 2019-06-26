@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, AsyncPipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
@@ -11,6 +11,7 @@ import { EventListComponent } from './components/event-list/event-list.component
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { VoteInterceptor } from '../core/interceptors/vote.interceptor';
 import { DisableControlDirective } from './directives/disable-control.directive';
+import { MessagingService } from './services/messaging.service';
 
 @NgModule({
     imports: [
@@ -38,7 +39,7 @@ import { DisableControlDirective } from './directives/disable-control.directive'
       DisableControlDirective
     ],
     providers:[
-      {provide: HTTP_INTERCEPTORS, useClass: VoteInterceptor, multi:true}
+      {provide: HTTP_INTERCEPTORS, useClass: VoteInterceptor, multi:true},
     ]
 })
 export class SharedModule { }

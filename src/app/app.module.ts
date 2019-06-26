@@ -16,6 +16,13 @@ import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CoreModule } from './core';
 import { SharedModule } from './shared';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireMessagingModule } from '@angular/fire/messaging';
+import { AngularFireModule } from '@angular/fire';
+import { environment } from 'src/environments/environment';
+import { AsyncPipe } from '@angular/common';
+import { MessagingService } from './shared/services/messaging.service';
 
 @NgModule({
   declarations: [
@@ -39,9 +46,16 @@ import { SharedModule } from './shared';
     // app
     AppRoutingModule,
 
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+
+
+    AngularFireDatabaseModule,
+    AngularFireAuthModule,
+    AngularFireMessagingModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    
   ],
-  providers: [],
+  providers: [MessagingService, AsyncPipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
