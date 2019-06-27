@@ -132,18 +132,19 @@ export class EventDetailsComponent implements OnInit , OnChanges {
     this.eventVotingForm = new FormGroup({
       'options': new FormArray([]),
     });
-
+    
+    
     /*Get event If Voted by current user */
     this.votingService.getVotingStatus().subscribe(
       (res)=>{
         
         let newUserEmail = this.auth.getUserLoggedIn()['email'];
         let newEventIndex = this.index;
-
-          this.voteingData = res;
-          this.onFillMatchedEvents();
-
-          if(this.voteingData){
+        
+        this.voteingData = res;
+        this.onFillMatchedEvents();
+        
+        if(this.voteingData){
             this.eventItemFounded = this.voteingData.find(
               function(eventEl) {
                 if(eventEl){
@@ -152,37 +153,36 @@ export class EventDetailsComponent implements OnInit , OnChanges {
               }
               );
             }
-      }
-  );
+          }
+          );
   /**End of Voted by current user */
-
-    /* Get Event Details for current event Index */
-    this.eventService.getEventData().subscribe(
-      Response => {
-        this.eventsData = [];
-        for (let item of Response){
-          this.eventsData.push(item[1]);
-        }
-        this.eventItem = this.eventsData[this.index];
-        
-        // fill event Voting options array
-        if(this.eventItemFounded){
-          for (let item of this.eventItemFounded.option['options']){
-            const control = new FormControl(item);
-            const controlCount = new FormControl(0);
-            (<FormArray>this.eventVotingForm.get('options')).push(control);
-          }
-        }
-        else{
-            for (let item of this.eventItem.options){
-            const control = new FormControl('');
-            (<FormArray>this.eventVotingForm.get('options')).push(control);
-          }
+  
+  /* Get Event Details for current event Index */
+  this.eventService.getEventData().subscribe(
+    Response => {
+      this.eventsData = [];
+      for (let item of Response){
+        this.eventsData.push(item[1]);
+      }
+      this.eventItem = this.eventsData[this.index];
+      
+      // fill event Voting options array
+      if(this.eventItemFounded){
+        for (let item of this.eventItemFounded.option['options']){
+          const control = new FormControl(item);
+          const controlCount = new FormControl(0);
+          (<FormArray>this.eventVotingForm.get('options')).push(control);
         }
       }
-  );
-
-  // get vote result async
+      else{
+          for (let item of this.eventItem.options){
+          const control = new FormControl('');
+          (<FormArray>this.eventVotingForm.get('options')).push(control);
+        }
+      }
+    }
+);
+    // get vote result async
     // this.getVoteResult();
 
 
@@ -350,6 +350,8 @@ console.log('--- result shoinwg', this.ResultShowing);
 
     debugger;
       if(this.targetCounter){
+        console.log('||check target Counter:');
+        
         // this.viewVotePercentage = this.votingPercentage(this.matchedEvents.length, this.targetCounter.counter );
         
         let voteResult: VotingCounterModel = {
@@ -358,6 +360,22 @@ console.log('--- result shoinwg', this.ResultShowing);
         }
 
         this.voteResultService.setVoteResult(voteResult);
+      }
+      else{
+        console.log('||check target Counter - Else:');
+        console.log('|| targetCounter', this.targetCounter);
+        console.log('|| this.VoteResultCounter', this.VoteResultCounter.length>0 );
+        console.log('|| this.votingCounter', this.votingCounter);
+        console.log('|| this.eventVotingForm', this.eventVotingForm.value['options']);
+        console.log('|| this.voteResult', this.voteResult);
+        console.log('|| this.eventItem', this.eventItem);
+
+
+
+        
+
+
+
       }
     
   }
@@ -434,7 +452,12 @@ console.log('--- result shoinwg', this.ResultShowing);
     this.messagingService.receiveMessage(this.index);
     this.messagingService.receiveVoteResult(this.index);
     this.message = this.messagingService.currentMessage;
-    this.voteResult = this.messagingService.currentVoteResult;
+    if(this.messagingService.currentVoteResult){
+      this.voteResult = this.messagingService.currentVoteResult;
+    }
+    else{
+      this.voteResult.value = null
+    }
     console.log('this.voteResult :', this.voteResult);
 
   }

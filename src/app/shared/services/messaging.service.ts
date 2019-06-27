@@ -90,11 +90,14 @@ export class MessagingService {
   receiveVoteResult(eventIndex) {
     debugger;
     console.log('gwa receiveVoteResult - index:', eventIndex);
+    console.log('gwa receiveVoteResult - this.angularFireMessaging.messages:', this.angularFireMessaging.messages);
     
     this.showLoading = true;
     this.angularFireMessaging.messages.subscribe(
       (payload) => {
         // this.spinnerComponet.isLoading = true;
+        console.log('inside success of angularFireMessaging.messages');
+        
        
         this.VoteResultService.getVoteResult().subscribe(
           (payload) => {
@@ -106,13 +109,23 @@ export class MessagingService {
               if(element){
                 return (element.eventIndex == eventIndex);
               }
+              else{
+                console.log('Not voted before');
+                
+              }
             });
-    
+
             debugger;
             
-            console.log('**updatedVoteResult', updatedVoteResult.counter);
-            
-            this.currentVoteResult.next(updatedVoteResult.counter);
+            if(updatedVoteResult){
+              console.log('check for updatedVoteResult: ', updatedVoteResult);
+              console.log('**updatedVoteResult', updatedVoteResult.counter);
+              this.currentVoteResult.next(updatedVoteResult.counter);
+            }
+            else{
+              console.log('new vote result');
+              
+            }
             
           },
           err=>console.log('error while getting vote result'),
@@ -120,12 +133,19 @@ export class MessagingService {
               // this.spinnerComponet.isLoading = false;
               this.showLoading = false;
 
-
           }
           
           )
           
-        });
+        },(err)=>{
+          console.log('error within subscribe angularFireMessaging.messages');
+          
+        },
+        ()=>{
+          console.log('complete within subscribe angularFireMessaging.messages');
+        }
+        
+        );
   }
 
 

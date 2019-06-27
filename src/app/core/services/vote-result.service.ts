@@ -196,7 +196,6 @@ export class VoteResultService {
               const fcmTokenEntries = Object.entries(fcmTokenData)
                 console.log('fcmTokenEntries',fcmTokenEntries)
                 return fcmTokenEntries
-
             }
           )
     }

@@ -3,6 +3,7 @@ import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { EventStorageService } from 'src/app/core/services/event-storage.service';
 import { eventForm } from 'src/app/core/models/event-form.model';
 import { Router } from '@angular/router';
+import { MessagingService } from 'src/app/shared/services/messaging.service';
 
 @Component({
   selector: 'app-create-event',
@@ -14,7 +15,7 @@ export class CreateEventComponent implements OnInit, OnChanges {
   createEventForm : FormGroup;
   // eventData: eventForm[];
 
-  constructor(private EventService: EventStorageService, private router: Router) {
+  constructor(private EventService: EventStorageService, private router: Router,private MessagingService: MessagingService) {
 
    }
 
@@ -70,7 +71,9 @@ export class CreateEventComponent implements OnInit, OnChanges {
             
             console.log('event id ', (res.length)-1);
             
+            console.log('this.MessagingService.currentVoteResult', this.MessagingService.currentVoteResult);
             
+            // this.MessagingService.currentVoteResult = null;
             this.router.navigate([`/events/event-details/${(res.length)-1}`]);
           }
         )
