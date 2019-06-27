@@ -12,7 +12,7 @@ import { AuthService } from './core/services/auth.service';
 
 export class AppComponent implements OnInit {
 
-  // message;
+  message;
   // voteResult;
 
   constructor(private messagingService: MessagingService, private authService:AuthService) { }
