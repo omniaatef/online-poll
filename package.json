@@ -25,6 +25,7 @@
     "core-js": "^2.5.4",
     "express": "^4.17.1",
     "firebase": "^6.2.2",
+    "font-awesome": "^4.7.0",
     "path": "^0.12.7",
     "rxjs": "~6.3.3",
     "rxjs-compat": "~6.3.3",
