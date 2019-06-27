@@ -1,13 +1,14 @@
 import * as firebase from 'firebase';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { MockNgModuleResolver } from '@angular/compiler/testing';
 
 
 @Injectable()
 export class AuthService{
 
     LoggedUser: string;
-
+    errorMessage;
     constructor(private router: Router){}
 
     // Set data on localStorage
@@ -38,9 +39,9 @@ export class AuthService{
             this.router.navigate(['/auth/login']);
            } 
         )
+    
         .catch(
-            error => console.log('error register', error)
-        )
+            error => this.errorMessage = error.message)
     }
 
     loginUser(email:string, password:string){

@@ -1,8 +1,10 @@
+import { catchError } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { stringify } from 'querystring';
-import { analyzeAndValidateNgModules } from '@angular/compiler';
+import { analyzeAndValidateNgModules, getParseErrors } from '@angular/compiler';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { promise } from 'protractor';
 
 @Component({
   selector: 'app-register',
@@ -20,6 +22,10 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {
   }
+  get errorMessage(): string{
+    return this.authservice.errorMessage;
+  }
+
 
   onSubmit(form: NgForm){
     this.firstName = form.value.firstName;
@@ -30,6 +36,7 @@ export class RegisterComponent implements OnInit {
     console.log(this.firstName, this.lastName, this.Email, this.password);
 
     this.authservice.registerUser(this.Email, this.password);
+    
   }
 
 

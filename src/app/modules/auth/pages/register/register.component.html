@@ -88,7 +88,12 @@
                 </div>
             </div>
         </div>
-
+        <div  *ngIf="this.errorMessage" class="alert alert-danger mt-2">
+            <small>
+                {{this.errorMessage}}
+            </small>
+        </div>
+    
         <!-- <span *ngIf="!signUp.valid && signUp.touched">Please enter a valid Data</span> -->
 
         <button class="btn btn-lg btn-primary btn-block" type="submit" [disabled]="!signUp.valid">Sign Up</button>
