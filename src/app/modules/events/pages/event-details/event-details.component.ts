@@ -19,7 +19,7 @@ import { fcmTokenModel } from 'src/app/core/models/fcm-token.model';
   templateUrl: './event-details.component.html',
   styleUrls: ['./event-details.component.css']
 })
-export class EventDetailsComponent implements OnInit , OnChanges {
+export class EventDetailsComponent implements OnInit {
 
   eventsData: eventForm[];
   index :number;
@@ -32,7 +32,7 @@ export class EventDetailsComponent implements OnInit , OnChanges {
   eventIndex: number ;
   
   voteingData: VotingStatusModel[] = [];
-  eventItemFounded: VotingStatusModel;
+  eventItemFound: VotingStatusModel;
   
   matchedEvents: VotingStatusModel[] = [];
   votingCounter :VotingCounterModel[] = [
@@ -85,215 +85,97 @@ export class EventDetailsComponent implements OnInit , OnChanges {
         }
 
 
-  // @Input()
-  // ck=true;
-
-  ngOnChanges(changes: SimpleChanges){
-    console.log("2");
-  }
 
   change(index){
-    console.log('previous form status:', this.eventVotingForm.value);
-    console.log('previous form status Prev:', this.PrevFormStatus);
-    console.log('previous form status dirty:', this.eventVotingForm.dirty);
-    
-    console.log('inside change: ',index);
-
     this.checkFormDirty = this.eventVotingForm.dirty;
-
-    
-
-
     
   }
 
 
   ngOnInit() {
-    debugger;
 
+    /**ToDo: get permission from browser to allow sending notifications */
+    this.getPermissionPerToken();
 
-    // this.SendNotification();
+    /**ToDo: get the latest vote results from database async & send notification */
+    this.getVoteResult();
 
-    let user = this.authService.getUserLoggedIn(); 
-    console.log('user:', user.uid);
-
-    const userId = user.uid;
-    this.messagingService.requestPermission(userId);
-    console.log('el event index:', this.index);
-    
-    // this.messagingService.receiveMessage(this.index);
-    this.messagingService.receiveVoteResult(this.index);
-    // this.message = this.messagingService.currentMessage;
-    this.voteResult = this.messagingService.currentVoteResult;
-    console.log('this.voteResult :', this.voteResult);
-
-
-
+    /** ToDo: create FormGroup for the all options */
     this.eventVotingForm = new FormGroup({
       'options': new FormArray([]),
     });
     
-    
-    /*Get event If Voted by current user */
-    this.votingService.getVotingStatus().subscribe(
-      (res)=>{
-        
-        let newUserEmail = this.auth.getUserLoggedIn()['email'];
-        let newEventIndex = this.index;
-        
-        this.voteingData = res;
-        this.onFillMatchedEvents();
-        
-        if(this.voteingData){
-            this.eventItemFounded = this.voteingData.find(
-              function(eventEl) {
-                if(eventEl){
-                  return eventEl['email'] == newUserEmail && eventEl['eventIndex'] == newEventIndex;
-                }
-              }
-              );
-            }
-          }
-          );
-  /**End of Voted by current user */
+    /** ToDo: get voting status if voted before by current user */
+    this.getVotingStatusForUser();
   
-  /* Get Event Details for current event Index */
-  this.eventService.getEventData().subscribe(
-    Response => {
-      this.eventsData = [];
-      for (let item of Response){
-        this.eventsData.push(item[1]);
-      }
-      this.eventItem = this.eventsData[this.index];
-      
-      // fill event Voting options array
-      if(this.eventItemFounded){
-        for (let item of this.eventItemFounded.option['options']){
-          const control = new FormControl(item);
-          const controlCount = new FormControl(0);
-          (<FormArray>this.eventVotingForm.get('options')).push(control);
-        }
-      }
-      else{
-          for (let item of this.eventItem.options){
-          const control = new FormControl('');
-          (<FormArray>this.eventVotingForm.get('options')).push(control);
-        }
-      }
-    }
-);
-    // get vote result async
-    // this.getVoteResult();
-
+    /** ToDo: get event details for current event index */
+    this.getEventDetails();
 
   }
-
-
-
+  
+  
   onVoteBtnClick(){
-
     this.messagingService.showLoading = true;
-    console.log('Begin of Click',this.votingService.storedStatus);
     
-    // debugger;
-    this.userEmail = this.auth.getUserLoggedIn()['email'];
-    this.eventIndex = this.index;
     let eventData: VotingStatusModel = {
-      email: this.userEmail,
-      eventIndex: this.eventIndex,
+      email: this.auth.getUserLoggedIn()['email'],
+      eventIndex: this.index,
       option: this.eventVotingForm.value
     }
-    debugger;
+
     this.votingService.setVotingData(eventData);
     
     this.touched = true;
-    this.onFillMatchedEvents();
+    this.FillMatchedEvents();
 
     if(this.voteResultService.latestVoteResult){
-
       this.targetCounter =  this.voteResultService.latestVoteResult.find(element => {
         if(element){
           return element.eventIndex == this.index;
         }
       });
-      
       this.VoteResultCounter = this.targetCounter.counter;
-      // this.SendNotification();
     }
-
-    console.log('end of Click',this.votingService.storedStatus);
-
     
     this.touched = false;
     this.checkFormDirty = false;
-
-    console.log('check form status: ', this.eventVotingForm);
-
-    debugger;
-    console.log('get token',this.auth.getUserLoggedIn());
-    // console.log('angularFireDB',this.angularFireDB(''));
-    
-    debugger;
-
-    // this.fcmTokens.forEach(token => {
-    //   console.log('-- get tokens', token);
-      
-    //   // this.voteResultService.sendNotifications(token).subscribe(
-    //   //   (res)=>{
-    //   //     console.log('inside send notifications response');
-    //   //   },
-    //   //   (err)=> {
-    //   //     console.log('inside send notifications error');
-          
-    //   //   }
-    //   // );
-      
-    // });
-
-console.log('type of this.voteResult',typeof(this.voteResult) );
-this.ResultShowing = this.messagingService.showLoading;
-console.log('--- result shoinwg', this.ResultShowing);
-
-    
+    this.ResultShowing = this.messagingService.showLoading;
   }
-
-
-  onFillMatchedEvents(){
+  
+  
+  FillMatchedEvents(){
     this.matchedEvents = [];
-
+    
     for(let i=0; i<this.eventVotingForm.value['options'].length; i++){
       if(this.targetCounter){
         this.targetCounter.counter[i] = 0; 
       }
     }
-
+    
     let counterLength;
     
     if(this.voteingData){
+      this.voteingData.forEach(element => {
 
-    this.voteingData.forEach(element => {
-
-      /** check if this user voted before */
-      let checkFirstVote = this.voteingData.find(element=>{
+        /** check if this user voted before */
+        let checkFirstVote = this.voteingData.find(element=>{
+          if(element){
+            this.userEmail = this.auth.getUserLoggedIn()['email'];
+            return (element.email == this.userEmail) && (element.eventIndex == this.index);
+          }
+        });
+        
         if(element){
-          this.userEmail = this.auth.getUserLoggedIn()['email'];
-          return (element.email == this.userEmail) && (element.eventIndex == this.index);
-        }
-      });
-
-        if(element){
-
           if(this.touched){
             if((this.index == element.eventIndex) && (this.userEmail != element.email)){
-                  this.matchedEvents.push(element);
+              this.matchedEvents.push(element);
               }
-
-            else if((this.index == element.eventIndex) && (this.userEmail == element.email)){
+              
+              else if((this.index == element.eventIndex) && (this.userEmail == element.email)){
                 element.option['options'] = this.eventVotingForm.value['options'];
                 this.matchedEvents.push(element);
-                
               }
-
+              
               else if(checkFirstVote == undefined && this.notExistFlag ){
                   let lastMatched: VotingStatusModel;
                   lastMatched = {
@@ -301,169 +183,125 @@ console.log('--- result shoinwg', this.ResultShowing);
                     eventIndex: this.index,
                     option: this.eventVotingForm.value
                   }
-
+                  
                   this.matchedEvents.push(lastMatched);
                   this.voteingData.push(lastMatched);
                   this.notExistFlag = false;
+                }
+              } 
+              else{
+                if((this.index == element.eventIndex)){
+                  this.matchedEvents.push(element);
+                }
               }
-          } 
-        
-        else{
-          if((this.index == element.eventIndex)){
-            this.matchedEvents.push(element);
-          }
-        }
-      }
+            }
     });
   }
-
-
-    this.matchedEvents.forEach(item =>{
-      // debugger;
-      counterLength =  item.option['options'].length;
-
-      if(counterLength && this.flag){
-        let counterItem = {
-          eventIndex:this.index,
-          counter: []
-        }
   
+  
+  this.matchedEvents.forEach(item =>{
+    counterLength =  item.option['options'].length;
+    
+    if(counterLength && this.flag){
+      let counterItem = {
+        eventIndex:this.index,
+        counter: []
+      }
+      
         for(let i=0; i<counterLength;i++){
           counterItem.counter.push(0);
         }
-  
+        
         this.votingCounter.push(counterItem);
         this.flag = false;
       }
-
+      
       this.targetCounter = this.votingCounter.find(element=>{
         return element.eventIndex == this.index;
       });
-
+      
       for(let i=0; i<item.option['options'].length; i++){
-
+        
         if(item.option['options'][i] == true){
           this.targetCounter.counter[i]++;
         }
       }
     });
-
-    debugger;
-      if(this.targetCounter){
-        console.log('||check target Counter:');
-        
-        // this.viewVotePercentage = this.votingPercentage(this.matchedEvents.length, this.targetCounter.counter );
-        
-        let voteResult: VotingCounterModel = {
-          eventIndex:this.index,
-          counter:this.targetCounter.counter
-        }
-
+    
+    if(this.targetCounter){
+      let voteResult: VotingCounterModel = {
+        eventIndex:this.index,
+        counter:this.targetCounter.counter
+      }
         this.voteResultService.setVoteResult(voteResult);
       }
-      else{
-        console.log('||check target Counter - Else:');
-        console.log('|| targetCounter', this.targetCounter);
-        console.log('|| this.VoteResultCounter', this.VoteResultCounter.length>0 );
-        console.log('|| this.votingCounter', this.votingCounter);
-        console.log('|| this.eventVotingForm', this.eventVotingForm.value['options']);
-        console.log('|| this.voteResult', this.voteResult);
-        console.log('|| this.eventItem', this.eventItem);
+      
+    }
 
-
-
-        
-
-
-
+    
+      /**ToDo: get permission from browser to allow sending notifications */
+      getPermissionPerToken(){
+        let user = this.authService.getUserLoggedIn(); 
+        const userId = user.uid;
+        this.messagingService.requestPermission(userId);
       }
     
-  }
-
-  // votingPercentage(totalCount, votesCount){
-  //   // debugger;
-  //   let votesCountPercentage=[];
-  //   for(let i=0; i<votesCount.length; i++){
-  //     votesCountPercentage[i] = (votesCount[i]/totalCount)*100;
-  //   }
-  //   return votesCountPercentage;
-  // }
-
-  // setMyStyles(index) {
-  //   let styles = {
-  //     'width':  this.viewVotePercentage[index] ? this.viewVotePercentage[index]+'%' : '0%',
-  //   };
-  //   return styles;
-  // }
-
-
-
-  // setMyStyles(counter) {
-  //   let styles = {
-  //     'width':  this.viewVotePercentage[index] ? this.viewVotePercentage[index]+'%' : '0%',
-  //   };
-  //   return styles;
-  // }
-
-   getVoteResult(){
-     debugger;
-      
-      this.voteResultService.getVoteResult().subscribe(
-        (res)=>{
-          console.log('get result success', res);
-          
-          if(res){
-
-            let targetCounter = res.find(element => {
-              if(element){
-                return element.eventIndex == this.index;
-              }
-            });
+      /**ToDo: get the latest vote results from database async & send notification */
+      getVoteResult(){
+        this.messagingService.receiveVoteResult(this.index);
+        this.voteResult = this.messagingService.currentVoteResult;
+      }
+    
+      /**ToDo: Get voting status if voted before by current user  */
+      getVotingStatusForUser(){
+        this.votingService.getVotingStatus().subscribe(
+          (res)=>{
             
-            if(targetCounter){
-              this.VoteResultCounter = targetCounter.counter;
+            let newUserEmail = this.auth.getUserLoggedIn()['email'];
+            let newEventIndex = this.index;
+            
+            this.voteingData = res;
+            this.FillMatchedEvents();
+            
+            if(this.voteingData){
+                this.eventItemFound = this.voteingData.find(
+                  function(eventEl) {
+                    if(eventEl){
+                      return eventEl['email'] == newUserEmail && eventEl['eventIndex'] == newEventIndex;
+                    }
+                  }
+                  );
+                }
+              }
+              );
+      }
+    
+      /** ToDo: get event details for current event index */
+      getEventDetails(){
+        this.eventService.getEventData().subscribe(
+          Response => {
+            this.eventsData = [];
+      
+            for (let item of Response){
+              this.eventsData.push(item[1]);
+            }
+      
+            this.eventItem = this.eventsData[this.index];
+            
+            // fill event Voting options array
+            if(this.eventItemFound){
+              for (let item of this.eventItemFound.option['options']){
+                const control = new FormControl(item);
+                (<FormArray>this.eventVotingForm.get('options')).push(control);
+              }
             }
             else{
-              for(let i=0; i<this.eventVotingForm.value['options'].length; i++){
-                this.VoteResultCounter[i] = 0; 
+                for (let item of this.eventItem.options){
+                const control = new FormControl('');
+                (<FormArray>this.eventVotingForm.get('options')).push(control);
               }
             }
           }
-          
-        },
-        (err)=>{
-          console.log('error occured while getting data', err);
-          
-        }
       );
-    
+      }
   }
-
-
-  SendNotification(){
-    debugger;
-    let user = this.authService.getUserLoggedIn(); 
-    console.log('user:', user.uid);
-
-    const userId = user.uid;
-    this.messagingService.requestPermission(userId);
-    console.log('el event index:', this.index);
-    
-    this.messagingService.receiveMessage(this.index);
-    this.messagingService.receiveVoteResult(this.index);
-    this.message = this.messagingService.currentMessage;
-    if(this.messagingService.currentVoteResult){
-      this.voteResult = this.messagingService.currentVoteResult;
-    }
-    else{
-      this.voteResult.value = null
-    }
-    console.log('this.voteResult :', this.voteResult);
-
-  }
-
-
-
-
-
-}
