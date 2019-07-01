@@ -8,12 +8,10 @@ import { eventForm } from 'src/app/core/models/event-form.model';
 })
 export class EventsComponent implements OnInit {
 
-  // eventsDataArr :eventForm[];
 
   constructor() { }
 
   ngOnInit() {
-    // console.log('inside event Comp:', this.eventsDataArr);
     
   }
 

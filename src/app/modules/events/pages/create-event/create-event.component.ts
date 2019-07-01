@@ -10,10 +10,9 @@ import { MessagingService } from 'src/app/shared/services/messaging.service';
   templateUrl: './create-event.component.html',
   styleUrls: ['./create-event.component.css']
 })
-export class CreateEventComponent implements OnInit, OnChanges {
+export class CreateEventComponent implements OnInit {
 
   createEventForm : FormGroup;
-  // eventData: eventForm[];
 
   constructor(private EventService: EventStorageService, private router: Router,private MessagingService: MessagingService) {
 
@@ -30,36 +29,13 @@ export class CreateEventComponent implements OnInit, OnChanges {
       'info': new FormControl('')
     });
 
-    console.log('inside Submit Form', this.createEventForm);
-
-
-
-
-    // this.eventData = this.createEventForm.value;
-    // console.log('type ofd ', typeof(this.eventData));
   }
-
-
-  ngOnChanges(){
-    console.log('inside on changes');
-
-  }
-  
-  
-
-  // this.createEventForm.valueChanges.subscribe(() => {
-  //   if (this.registerForm.controls['yourControlName'].value === 'someValue') {
-  //      // 
-  //   }
-  // });
 
 
   onSubmit(){
-    console.log('inside Submit Form', this.createEventForm.value);
     this.EventService.storeEventData(this.createEventForm.value).subscribe(
       (res:Response)=> 
       {
-        console.log('inside response', res);
         this.createEventForm.reset();
         
       },
@@ -67,13 +43,6 @@ export class CreateEventComponent implements OnInit, OnChanges {
       ()=>{
         this.EventService.getEventData().subscribe(
           (res)=>{
-            console.log('Get - inside complete - inside res: ',res);
-            
-            console.log('event id ', (res.length)-1);
-            
-            console.log('this.MessagingService.currentVoteResult', this.MessagingService.currentVoteResult);
-            
-            // this.MessagingService.currentVoteResult = null;
             this.router.navigate([`/events/event-details/${(res.length)-1}`]);
           }
         )
@@ -82,10 +51,8 @@ export class CreateEventComponent implements OnInit, OnChanges {
   }
 
   onAddOption(){
-    console.log('on add option');
     const control = new FormControl('');
     (<FormArray>this.createEventForm.get('options')).push(control);
-    
   }
 
   onDeleteOption(index: number){

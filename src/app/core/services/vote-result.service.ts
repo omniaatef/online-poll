@@ -20,52 +20,31 @@ export class VoteResultService {
 
     fcmTokens:fcmTokenModel[]=[];
 
-    constructor(private http : HttpClient,
-        ){}
-
-
-
+    constructor(private http : HttpClient){}
 
 
     setVoteResult(voteResult: VotingCounterModel){
-        debugger;
-
-
         
-  // /** Get tokens that saved */
+            // /** Get tokens that saved */
 
             this.getFcmTokens().subscribe(
               res=>{
-                console.log('token response', res);
                 if(res){
-                  // this.fcmTokens.push
                   this.fcmTokens = [];
                   res.forEach(element => {
                     this.fcmTokens.push(element[1]);
                   });
                 }
-                
               },
-              err=>{
-                console.log('token error', err);
-                
-              },
-              ()=>{
-                console.log('fcmTokens in Array', this.fcmTokens);
-                
-              }
+              err=>{},
+              ()=>{}
             );
-
 
         this.getVoteResult().subscribe(
             (res)=>{
-                debugger;
-                console.log('res:', res);
-                
                 if(res){
                 this.voteResult = res;
 
-                    
                     var eventItem = this.voteResult.find(
                         function(eventEl) {
                         if(eventEl){
@@ -83,52 +62,24 @@ export class VoteResultService {
 
                       this.storeVoteResult(this.voteResult).subscribe(
                           (success)=>{
-                              console.log('inside success vote store');
-                            //   alert('');
                               
                           },
                           (err)=>{},
                           ()=>{
-                              console.log('inside complete vote store');
-                              this.latestVoteResult = this.getCurrentVoteResult();
-                              console.log('el vote result after stored:', this.latestVoteResult);
+                                this.latestVoteResult = this.getCurrentVoteResult();
 
-                                                        
                                 this.fcmTokens.forEach(token => {
-                                console.log('-- get tokens', token);
                                 
-                                this.sendNotifications(token).subscribe(
-                                  (res)=>{
-                                    console.log('inside send notifications response');
-                                  },
-                                  (err)=> {
-                                    console.log('inside send notifications error');
-                                    
-                                  }
-                                );
-                                
+                                this.sendNotifications(token).subscribe();
                                 });
-
-                              
-                              
                           }
                       );
                 }else{
-                    console.log('awl mara',);
                     this.voteResult.push(voteResult);
                     this.storeVoteResult(this.voteResult).subscribe();
-                    
                 }
-
             },
             (err)=>{
-                console.log('inside get vote result error:', err);
-                
-            },
-            ()=>{
-                debugger;
-                console.log('completed..!');
-                
             }
         );
     }
@@ -137,9 +88,7 @@ export class VoteResultService {
     getCurrentVoteResult(){
         this.getVoteResult().subscribe(
             (res)=>{
-                debugger;
                 this.voteResult = res;
-
             }
         );
         return this.voteResult;
@@ -147,26 +96,12 @@ export class VoteResultService {
 
 
     storeVoteResult(voteResult: VotingCounterModel[]){
-        debugger;
-        console.log('inside store VoteResult', voteResult);
         return this.http.put('https://online-poll-84371.firebaseio.com/VoteResult.json',voteResult);
     }
 
-
     getVoteResult(){
-        debugger;
         return this.http.get<VotingCounterModel[]>('https://online-poll-84371.firebaseio.com/VoteResult.json');
-            // .map(
-            //     (eventsData)=>{
-            //       console.log('inside map - vote result',eventsData);
-            //       const eventEntries = Object.entries(eventsData);
-            //         console.log('VoteResult - vote result',eventEntries);
-            //         return eventEntries;
-
-            //     }
-            //   )
     }
-
 
     sendNotifications(token){
         let headers = new HttpHeaders({
@@ -192,9 +127,7 @@ export class VoteResultService {
         return this.http.get<fcmTokenModel[]>('https://online-poll-84371.firebaseio.com/fcmTokens.json')
         .map(
             (fcmTokenData)=>{
-              console.log('inside map - fcmTokenData',fcmTokenData);
               const fcmTokenEntries = Object.entries(fcmTokenData)
-                console.log('fcmTokenEntries',fcmTokenEntries)
                 return fcmTokenEntries
             }
           )

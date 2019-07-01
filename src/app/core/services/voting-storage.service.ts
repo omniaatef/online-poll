@@ -12,20 +12,15 @@ export class VotingStorageService {
 
     storedStatus: boolean = true;
 
-    constructor(private http : HttpClient){
-    }
+    constructor(private http : HttpClient){}
 
     setVotingData(votingData: VotingStatusModel){
         this.storedStatus = false
         
         this.getVotingStatus().subscribe(
             (res)=>{
-                debugger;
                 if(res){
-                    
                 this.voteingData = res;
-
-
                     var eventItem = this.voteingData.find(
                         function(eventEl) {
                             if(eventEl){
@@ -33,7 +28,6 @@ export class VotingStorageService {
                             }
                         }
                         );
-                        
                         
                         if(eventItem){
                             eventItem.option = votingData.option; 
@@ -49,36 +43,24 @@ export class VotingStorageService {
 
 
                 this.storeVotingStatus(this.voteingData).subscribe(
-                    (success)=>{
-                        console.log('2- inside storeVotingStatus success');
-                },
-                (err)=>{
-                    console.log('error while store:', err);
-                    
-                },
-                ()=>{
-                        console.log('3- inside storeVotingStatus - Complete');
+                    (success)=>{},
+                    (err)=>{},
+                    ()=>{
                         this.storedStatus = true;
-
-                }                
+                    }                
                 );
             },
-            ()=>{}
-            ,
+            ()=>{},
             ()=>{
-                console.log('1- inside getVotingStatus - Complete ');
                 this.storedStatus = false;
                 
             }
         );
     }
 
-
     storeVotingStatus(voteingData: VotingStatusModel[]){
-        debugger;
         return this.http.put('https://online-poll-84371.firebaseio.com/VotingData.json', voteingData);
     }
-
 
     getVotingStatus(){
         return this.http.get<VotingStatusModel[]>('https://online-poll-84371.firebaseio.com/VotingData.json')
