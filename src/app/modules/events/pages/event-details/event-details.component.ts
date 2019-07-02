@@ -140,6 +140,7 @@ export class EventDetailsComponent implements OnInit {
     this.touched = false;
     this.checkFormDirty = false;
     this.ResultShowing = this.messagingService.showLoading;
+    
   }
   
   
@@ -248,6 +249,8 @@ export class EventDetailsComponent implements OnInit {
     
       /**ToDo: get the latest vote results from database async & send notification */
       getVoteResult(){
+        debugger;
+        console.log('this.vote result inside getVoteResult Function', this.voteResult);
         this.messagingService.receiveVoteResult(this.index);
         this.voteResult = this.messagingService.currentVoteResult;
       }

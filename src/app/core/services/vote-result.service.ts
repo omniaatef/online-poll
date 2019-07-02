@@ -80,6 +80,10 @@ export class VoteResultService {
                 }
             },
             (err)=>{
+            },
+            ()=>{
+                console.log('inside complete - get vote result01');
+                
             }
         );
     }

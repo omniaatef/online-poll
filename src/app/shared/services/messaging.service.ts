@@ -7,6 +7,7 @@ import { take } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs'
 import { VoteResultService } from 'src/app/core/services/vote-result.service';
 import { SpinnerComponent } from '../components/spinner/spinner.component';
+import { debug } from 'util';
 
 @Injectable()
 export class MessagingService {
@@ -92,16 +93,17 @@ export class MessagingService {
     console.log('gwa receiveVoteResult - index:', eventIndex);
     console.log('gwa receiveVoteResult - this.angularFireMessaging.messages:', this.angularFireMessaging.messages);
     
+    console.log('currentVoteResult', this.currentVoteResult);
     this.showLoading = true;
     this.angularFireMessaging.messages.subscribe(
       (payload) => {
         // this.spinnerComponet.isLoading = true;
         console.log('inside success of angularFireMessaging.messages');
         
-       
         this.VoteResultService.getVoteResult().subscribe(
           (payload) => {
           debugger;
+          this.showLoading = true;
             console.log("new VoteResult received. ", payload);
             console.log("new VoteResult received. - latestVoteResult ", this.VoteResultService.getCurrentVoteResult());
     
@@ -131,6 +133,7 @@ export class MessagingService {
           err=>console.log('error while getting vote result'),
           ()=>{
               // this.spinnerComponet.isLoading = false;
+              debugger;
               this.showLoading = false;
 
           }
@@ -146,6 +149,10 @@ export class MessagingService {
         }
         
         );
+
+        console.log('end of that function');
+        this.currentVoteResult = new BehaviorSubject(null);
+        
   }
 
 
