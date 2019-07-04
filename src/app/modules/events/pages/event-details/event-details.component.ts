@@ -63,6 +63,11 @@ export class EventDetailsComponent implements OnInit {
 
   ResultShowing;
 
+  showLoadingOnInit: boolean = true;
+
+
+  result$;
+
 
   
   constructor(private route: ActivatedRoute,
@@ -93,13 +98,7 @@ export class EventDetailsComponent implements OnInit {
 
 
   ngOnInit() {
-
-    /**ToDo: get permission from browser to allow sending notifications */
-    this.getPermissionPerToken();
-
-    /**ToDo: get the latest vote results from database async & send notification */
-    this.getVoteResult();
-
+    
     /** ToDo: create FormGroup for the all options */
     this.eventVotingForm = new FormGroup({
       'options': new FormArray([]),
@@ -107,15 +106,20 @@ export class EventDetailsComponent implements OnInit {
     
     /** ToDo: get voting status if voted before by current user */
     this.getVotingStatusForUser();
-  
+    
     /** ToDo: get event details for current event index */
     this.getEventDetails();
+
+
+    this.result$ = this.voteResultService.getResult(this.index);
+    debugger;
+    console.log('get new result:', this.result$);
+    
 
   }
   
   
   onVoteBtnClick(){
-    this.messagingService.showLoading = true;
     
     let eventData: VotingStatusModel = {
       email: this.auth.getUserLoggedIn()['email'],
@@ -124,27 +128,18 @@ export class EventDetailsComponent implements OnInit {
     }
 
     this.votingService.setVotingData(eventData);
-    
+
     this.touched = true;
     this.FillMatchedEvents();
 
-    if(this.voteResultService.latestVoteResult){
-      this.targetCounter =  this.voteResultService.latestVoteResult.find(element => {
-        if(element){
-          return element.eventIndex == this.index;
-        }
-      });
-      this.VoteResultCounter = this.targetCounter.counter;
-    }
-    
     this.touched = false;
     this.checkFormDirty = false;
-    this.ResultShowing = this.messagingService.showLoading;
     
   }
   
   
   FillMatchedEvents(){
+    debugger;
     this.matchedEvents = [];
     
     for(let i=0; i<this.eventVotingForm.value['options'].length; i++){
@@ -232,33 +227,22 @@ export class EventDetailsComponent implements OnInit {
     if(this.targetCounter){
       let voteResult: VotingCounterModel = {
         eventIndex:this.index,
-        counter:this.targetCounter.counter
+        counter:this.targetCounter.counter,
       }
-        this.voteResultService.setVoteResult(voteResult);
+        // this.voteResultService.setVoteResult(voteResult);
+        this.voteResultService.setResult(voteResult,this.index)
       }
       
     }
 
     
-      /**ToDo: get permission from browser to allow sending notifications */
-      getPermissionPerToken(){
-        let user = this.authService.getUserLoggedIn(); 
-        const userId = user.uid;
-        this.messagingService.requestPermission(userId);
-      }
-    
-      /**ToDo: get the latest vote results from database async & send notification */
-      getVoteResult(){
-        debugger;
-        console.log('this.vote result inside getVoteResult Function', this.voteResult);
-        this.messagingService.receiveVoteResult(this.index);
-        this.voteResult = this.messagingService.currentVoteResult;
-      }
-    
       /**ToDo: Get voting status if voted before by current user  */
       getVotingStatusForUser(){
+        debugger;
         this.votingService.getVotingStatus().subscribe(
           (res)=>{
+          debugger;
+
             
             let newUserEmail = this.auth.getUserLoggedIn()['email'];
             let newEventIndex = this.index;

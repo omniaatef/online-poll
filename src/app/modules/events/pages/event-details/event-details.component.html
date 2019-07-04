@@ -68,54 +68,54 @@
                                         </div> -->
 
 
+                                <div *ngIf="result$ | async as result" class="tag is-large" >
+                                    {{ result.voteResult.counter }} here
+                                    {{ result.voteResult.eventIndex }} 
+                                </div>
 
                                         <div class="event" *ngIf="eventItem" >
+
+
+
+
                                             <!-- Vote Result For existing events -->
-                                            <div *ngIf="this.voteResult.value">
+                                            <!-- <div *ngIf="this.voteResult.value">
                                                 <app-spinner [isLoading]="this.messagingService.showLoading"></app-spinner>
                                                 
                                                 <div class="event_options"  *ngFor="let item of voteResult | async; let i = index">
                                                     {{eventItem.options[i]}}
-                                                    <!-- <span *ngIf="this.VoteResultCounter">({{this.VoteResultCounter[i] }})</span> -->
                                                 <span *ngIf="this.VoteResultCounter">
                                                     ({{item}})
                                                 </span>
                                                 
                                                 <span *ngIf="!this.VoteResultCounter">(0)</span>:
                                                 <div class="progress  progress-bar-striped active">
-                                                    <!-- <div class="progress-bar  bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"  [ngStyle]="setMyStyles(i)"> -->
                                                         <div class="progress-bar  bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"  [style.width.%]="(item / this.matchedEvents.length) * 100">
-                                                            <!-- <span *ngIf="this.viewVotePercentage" class="">{{this.viewVotePercentage[i] | number}}%</span> -->
                                                             <span *ngIf="this.viewVotePercentage" class="">{{ (item / this.matchedEvents.length) * 100 }}%</span>
                                                         </div>
-                                                        <!-- (votesCount[i]/totalCount)*100; -->
                                                         
                                                     </div>
                                                     
                                                 </div>
                                                 
-                                            </div>
+                                            </div> -->
                                             <!--End of Vote Result For existing events -->
 
                                             <!-- Vote Result For New events -->
-                                            <div *ngIf="!this.voteResult.value">
+                                            <!-- <div *ngIf="!this.voteResult.value">
                                                 <div class="event_options"  *ngFor="let item of eventItem.options ; let i = index">
                                                         {{eventItem.options[i]}}
-                                                        <!-- <span *ngIf="this.VoteResultCounter">({{this.VoteResultCounter[i] }})</span> -->
                                                     <span *ngIf="this.VoteResultCounter">
                                                         (0)
                                                     </span>:
                                                     <div class="progress  progress-bar-striped active">
-                                                        <!-- <div class="progress-bar  bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"  [ngStyle]="setMyStyles(i)"> -->
                                                             <div class="progress-bar  bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"  [style.width.%]="0">
-                                                                <!-- <span *ngIf="this.viewVotePercentage" class="">{{this.viewVotePercentage[i] | number}}%</span> -->
                                                                 <span *ngIf="this.viewVotePercentage" class="">0%</span>
                                                             </div>
-                                                            <!-- (votesCount[i]/totalCount)*100; -->
                                                             
                                                         </div>
                                                     </div>
-                                            </div>
+                                            </div> -->
                                             <!--End of Vote Result For New events -->
 
 
