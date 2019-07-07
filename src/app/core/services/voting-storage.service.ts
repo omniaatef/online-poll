@@ -59,11 +59,11 @@ export class VotingStorageService {
     }
 
     storeVotingStatus(voteingData: VotingStatusModel[]){
-        return this.http.put('https://online-poll-84371.firebaseio.com/VotingData.json', voteingData);
+        return this.http.put('https://online-poll-84371.firebaseio.com/userVotingData.json', voteingData);
     }
 
     getVotingStatus(){
-        return this.http.get<VotingStatusModel[]>('https://online-poll-84371.firebaseio.com/VotingData.json')
+        return this.http.get<VotingStatusModel[]>('https://online-poll-84371.firebaseio.com/userVotingData.json')
     }
 
 

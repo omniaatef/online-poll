@@ -30,79 +30,51 @@
                                             <strong>Question : </strong>{{eventItem.eventQuestion}}
         
                                 </div>
-
+                                <!-- Card Details includes: options, results, Btn action -->
                                 <div class="card-body" formArrayName="options">
-                                        <ul class="list-group list-group-flush" *ngIf="eventItem">
+                                    <!-- List of options -->
+                                    <ul class="list-group list-group-flush" *ngIf="eventItem">
+                                            <li class="list-group-item" *ngFor="let option of eventItem.options; let i = index">
+                                                <div class="checkbox">
+                                                    <label>
+                                                    <input [disableControl]="!this.votingService.storedStatus" (change)="change(this.eventVotingForm.value.options)"  #checkInput type="checkbox" [formControlName]="i"> {{option}}
+                                                </label>
+                                                </div>
+                                            </li> 
+                                    </ul>
 
-                                                <li class="list-group-item" *ngFor="let option of eventItem.options; let i = index">
-                                                    <div class="checkbox">
-                                                        <label>
-                                                        <!-- <input (change)="onVoteSelected($event)"  #checkInput type="checkbox" [formControlName]="i"> {{option}} -->
-                                                        <input [disableControl]="!this.votingService.storedStatus" (change)="change(this.eventVotingForm.value.options)"  #checkInput type="checkbox" [formControlName]="i"> {{option}}
-                                                    </label>
-                                                    </div>
-                                                </li> 
-                    
-                                            </ul>
+                                    <!-- Vote Button -->
+                                    <div class="card-footer">
+                                        <button [disabled]="!this.checkFormDirty" class="btn btn-primary btn-sm btn-block" type="button" (click)="onVoteBtnClick($event)">Vote</button>
+                                    </div>
 
-                                <div class="card-footer">
-                                    <!-- <a href="#" class="btn btn-primary btn-sm btn-block"><span class="glyphicon glyphicon-bell"></span> Mark Your Vote</a> -->
-                                    <button [disabled]="!this.checkFormDirty" class="btn btn-primary btn-sm btn-block" type="button" (click)="onVoteBtnClick($event)">Vote</button>
-                                </div>
-
-                                            <br>
-                                    <p class="text-danger">Result Of User Votes :</p>
+                                    <!-- Card Content & Voters count -->
+                                    <br>
+                                    <span class="text-danger">Result :</span>
+                                    <!-- <span>({{this.matchedEvents.length}}) </span>
+                                    <span class="text-danger">Voters</span> -->
                                     <hr />
                                     
-                                    <!-- <div *ngIf="eventItem" >
-                                        <div  *ngFor="let option of eventItem.options; let i = index">
-                                            {{option}} 
-                                            <span *ngIf="this.targetCounter">({{this.targetCounter.counter[i]}})</span>
-                                            <span *ngIf="!this.targetCounter">(0)</span>:
-                                            <div class="progress  progress-bar-striped active">
-                                                    <div class="progress-bar  bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" [ngStyle]="setMyStyles(i)">
-                                                        <span *ngIf="this.viewVotePercentage" class="">{{this.viewVotePercentage[i] | number}}%</span>
-                                                    </div>
-                                            </div>
-                                            </div>
-                                        </div> -->
-
-
-                                <div *ngIf="result$ | async as result" class="tag is-large" >
-                                    {{ result.voteResult.counter }} here
-                                    {{ result.voteResult.eventIndex }} 
-                                </div>
-
-                                        <div class="event" *ngIf="eventItem" >
-
-
-
-
-                                            <!-- Vote Result For existing events -->
-                                            <!-- <div *ngIf="this.voteResult.value">
-                                                <app-spinner [isLoading]="this.messagingService.showLoading"></app-spinner>
-                                                
-                                                <div class="event_options"  *ngFor="let item of voteResult | async; let i = index">
+                                    <!-- Progress that display vote Result  -->
+                                    <div class="event" *ngIf="eventItem" >
+                                        <!-- Case: Existing Event in database -->
+                                        <div *ngIf="this.votingResultPerEvent">
+                                                <div class="event_options"  *ngFor="let item of votingResultPerEvent; let i = index">
                                                     {{eventItem.options[i]}}
-                                                <span *ngIf="this.VoteResultCounter">
+                                                <span *ngIf="votingResultPerEvent">
                                                     ({{item}})
                                                 </span>
-                                                
                                                 <span *ngIf="!this.VoteResultCounter">(0)</span>:
                                                 <div class="progress  progress-bar-striped active">
                                                         <div class="progress-bar  bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"  [style.width.%]="(item / this.matchedEvents.length) * 100">
-                                                            <span *ngIf="this.viewVotePercentage" class="">{{ (item / this.matchedEvents.length) * 100 }}%</span>
+                                                            <span *ngIf="this.viewVotePercentage" class="">{{ (item / this.matchedEvents.length) * 100 | number }}%</span>
                                                         </div>
-                                                        
                                                     </div>
-                                                    
                                                 </div>
-                                                
-                                            </div> -->
-                                            <!--End of Vote Result For existing events -->
+                                        </div>
 
-                                            <!-- Vote Result For New events -->
-                                            <!-- <div *ngIf="!this.voteResult.value">
+                                        <!-- Case: New Event in database -->
+                                        <div *ngIf="!this.votingResultPerEvent">
                                                 <div class="event_options"  *ngFor="let item of eventItem.options ; let i = index">
                                                         {{eventItem.options[i]}}
                                                     <span *ngIf="this.VoteResultCounter">
@@ -114,20 +86,13 @@
                                                             </div>
                                                             
                                                         </div>
-                                                    </div>
-                                            </div> -->
-                                            <!--End of Vote Result For New events -->
+                                                </div>
 
-
-                                            </div>
-
+                                        </div>
+                                    </div>
 
                                 </div>
-                                
 
-                                <!-- <div class="card-footer">
-                                    <a href="#" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-bell"></span> Mark Your Vote</a>
-                                </div> -->
                                 <br>
                             </div>
                             </form>
@@ -136,15 +101,7 @@
                         </div>
                         <!-- POLL DIV END-->
                     </div>
-        
-
-
         </div>
-
-
     </div>
-    <!-- {{ this.voteResult | async | json }} -->
-
-
 
 </section>

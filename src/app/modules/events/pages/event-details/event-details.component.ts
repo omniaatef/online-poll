@@ -68,6 +68,8 @@ export class EventDetailsComponent implements OnInit {
 
   result$;
 
+  votingResultPerEvent;
+
 
   
   constructor(private route: ActivatedRoute,
@@ -112,9 +114,22 @@ export class EventDetailsComponent implements OnInit {
 
 
     this.result$ = this.voteResultService.getResult(this.index);
+    console.log('this.result$ ', this.result$ );
+    
+
+     this.result$.forEach(element => {
+       if(element){
+         this.votingResultPerEvent = element.voteResult.counter;
+         console.log('result$ element: ', this.votingResultPerEvent);
+       }
+       else{
+        console.log('result$ element else: ', this.votingResultPerEvent);
+       }
+    });
+    
     debugger;
     console.log('get new result:', this.result$);
-    
+    console.log('get new result:', typeof(this.result$));
 
   }
   
