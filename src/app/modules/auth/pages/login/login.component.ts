@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { promise } from 'protractor';
@@ -8,12 +8,22 @@ import { promise } from 'protractor';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, AfterViewInit {
 
   Email: string;
   Password: string;
-
   loginErrorMsg;
+
+
+  @ViewChild('emailRef')emailRefElement: ElementRef;
+
+  ngAfterViewInit() {
+    this.emailRefElement.nativeElement.focus();
+    console.log(this.emailRefElement);
+
+  }
+
+
 
   constructor(private authservice: AuthService) {
   }
@@ -28,12 +38,12 @@ export class LoginComponent implements OnInit {
           error => {
               this.loginErrorMsg = error.message;
           }
-          
+
       );
 
 
   }
-  
+
 
 
 
