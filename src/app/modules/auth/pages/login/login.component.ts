@@ -19,8 +19,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.emailRefElement.nativeElement.focus();
-    console.log(this.emailRefElement);
-
   }
 
 
